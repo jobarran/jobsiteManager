@@ -3,25 +3,97 @@
 @tailwind utilities;
 
 :root {
+  --primary: #274494;
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: #f9fafb
+}
+
+
+
+@keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+} 
+
+@-webkit-keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+.fade-in {
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+}
+
+
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded transition-all;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 hover:bg-gray-300 text-black py-2 px-4 rounded transition-all;
+}
+
+.btn-login {
+  @apply w-full text-white bg-sky-600 hover:bg-black focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center
+}
+
+.btn-login-disabled {
+  @apply w-full text-white bg-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center
+}
+
+.circle-container {
+  width: 30px; /* Adjust the size of the circle container as needed */
+  height: 30px;
+  border-radius: 50%; /* Creates a circular shape */
+  overflow: hidden; /* Clips the content outside the circle */
+  position: relative; /* Allows absolute positioning of the icon */
+  vertical-align: middle; /* Ensures consistent vertical alignment */
+}
+
+.person-icon {
+  position: absolute; /* Allows absolute positioning inside the circle container */
+  top: 70%; /* Positions the icon at the center vertically */
+  left: 50%; /* Positions the icon at the center horizontally */
+  transform: translate(-50%, -50%); /* Centers the icon precisely */
+  vertical-align: middle; /* Ensures consistent vertical alignment */
+}
+
+.progress-ring {
+  stroke: #2b6cb0;
+  transition: stroke-dashoffset 0.5s ease-in-out;
+}
+
+.distribution-ring {
+    stroke-width: 4;
+    stroke: transparent;
+    transition: stroke-dashoffset 0.5s ease-in-out;
+}
+
+/* Define colors */
+.distribution-amber {
+    stroke: #f59e0b;
+}
+
+.distribution-sky {
+    stroke: #2d7dd2;
+}
+
+.distribution-lime {
+    stroke: #84cc16;
+}
+
+.distribution-gray {
+  stroke: #e5e7eb;
 }

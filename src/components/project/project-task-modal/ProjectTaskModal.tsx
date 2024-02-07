@@ -1,0 +1,69 @@
+'use client'
+
+import { ProjectSubTaskModal, ProjectTaskModalAddNewTask, ProjectTaskModalDetail, ProjectTaskModalDistributionChart, ProjectTaskModalHeader, ProjectTaskModalOptions, ProjectTaskModalSubTaskData, StatusBadge } from "@/components";
+import { ModalType, Task } from "@/interfaces";
+import { useUIStore } from "@/store";
+
+
+interface Props {
+    projectId: string
+    task: Task | null
+}
+
+export const ProjectTaskModal = ({ task, projectId }: Props) => {
+
+    const taskModalType = useUIStore(state => state.taskModalType)
+    const closeTaskModal = useUIStore(state => state.closeTaskModal)
+    const isTaskModalOpen = useUIStore(state => state.isTaskModalOpen)
+
+
+    const handleCloseModal = () => {
+        closeTaskModal()
+    };
+
+    const modalClasses = isTaskModalOpen
+        ? 'fixed top-0 right-0 bottom-0 flex flex-col w-full lg:w-1/3 h-screen transition-right-left duration-300 transform translate-x-0 bg-white z-50'
+        : 'fixed top-0 left-full bottom-0 flex flex-col w-full lg:w-1/3 h-screen transition-right-left duration-300 transform translate-x-full bg-white';
+
+    return (
+        <>
+            <div
+                id="add-task-modal"
+                tabIndex={-1}
+                aria-hidden="true"
+                className={modalClasses}
+            >
+                <ProjectSubTaskModal />
+
+                <div className="p-4 md:p-5 border-l dark:border-gray-600 h-full">
+
+                    {
+                        taskModalType === ModalType.New
+                            ?
+                            <ProjectTaskModalAddNewTask
+                                isOpen={isTaskModalOpen}
+                                onClose={handleCloseModal}
+                                projectId={projectId}
+                            />
+                            :
+                            <ProjectTaskModalDetail />
+                    }
+
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+        </>
+
+
+    );
+
+
+};

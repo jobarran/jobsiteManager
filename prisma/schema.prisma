@@ -1,0 +1,117 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  admin
+  user
+}
+
+enum ProjectStatus {
+  ongoing
+  finished
+  upcoming
+}
+
+enum TaskPriority {
+  normal
+  high
+  urgent
+}
+
+model User {
+  id       String   @id @default(uuid())
+  name     String
+  lastName String
+  email    String   @unique
+  password String
+  role     UserRole @default(user)
+  image    String?
+
+  // Relations - Up
+  activeCompany Company? @relation("CompanyUsers", fields: [companyId], references: [id])
+  companyId     String?
+
+  // Relations - Down
+  ownedCompany Company[] @relation("CompanyOwner")
+}
+
+model Company {
+  id             String   @id @default(uuid())
+  name           String
+  employeeFields String[]
+  employeeRoles  String[]
+  userPossitions String[]
+  companyLogo    String?
+
+  // Relations - Up
+  owner  User   @relation("CompanyOwner", fields: [userId], references: [id])
+  userId String
+
+  // Relations - Down
+  users    User[]    @relation("CompanyUsers")
+  projects Project[]
+}
+
+model Project {
+  id          String        @id @default(uuid())
+  name        String
+  description String
+  status      ProjectStatus @default(ongoing)
+
+  // Relations - Up
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId String
+
+  // Relations - Down
+  tasks Task[]
+
+  @@index([status])
+}
+
+model Task {
+  id          String  @id @default(uuid())
+  name        String
+  location    String
+  progress    String
+  incidence   String
+  contractor  String
+  start       String
+  end         String
+  priority    TaskPriority @default(normal)
+  status      ProjectStatus @default(upcoming)
+  description String
+
+  // Relations - Down
+  subTasks SubTask[]
+
+  // Relations - Up
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId String
+}
+
+model SubTask {
+  id          String @id @default(uuid())
+  name        String
+  location    String
+  progress    String
+  incidence   String
+  contractor  String
+  start       String
+  end         String
+  priority    TaskPriority @default(normal)
+  status      ProjectStatus @default(upcoming)
+  description String
+
+  // Relations - Up
+  task   Task   @relation(fields: [taskId], references: [id])
+  taskId String
+}
