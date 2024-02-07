@@ -44,7 +44,7 @@ export default async function ProjectByIdTaskPage({ params }: Props) {
                     : <div></div>
             }
             {
-                tasks && project
+                project
                     ? <ProjectTaskTable tasks={tasks} projectId={project.id} />
                     : <div>Loading...</div>
             }
