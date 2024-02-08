@@ -13,9 +13,6 @@ interface Props {
 
 export const ProjectTaskTable = ({tasks, projectId }: Props) => {
 
-    console.log(tasks)
-
-
     const [filteredData, setSearch, clearSearch, setNewData] = useQuickSearch(tasks);
     const [searchValue, setSearchValue] = useState('');
 
@@ -65,6 +62,7 @@ export const ProjectTaskTable = ({tasks, projectId }: Props) => {
                 handleSearchChange={handleSearchChange}
                 handleClearSearch={handleClearSearch}
                 projectId={projectId}
+                tasks={tasks}
             />
 
             <div>

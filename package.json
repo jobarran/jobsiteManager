@@ -13,6 +13,7 @@
   "dependencies": {
     "@next/font": "^14.0.4",
     "@prisma/client": "^5.7.0",
+    "@types/react-transition-group": "^4.4.10",
     "apexcharts": "^3.45.2",
     "bcryptjs": "^2.4.3",
     "clsx": "^2.0.0",
@@ -26,6 +27,7 @@
     "react-hook-form": "^7.49.2",
     "react-icons": "^4.12.0",
     "react-tailwindcss-datepicker": "^1.6.6",
+    "react-transition-group": "^4.4.5",
     "ts-node": "^10.9.2",
     "zod": "^3.22.4",
     "zustand": "^4.4.7"

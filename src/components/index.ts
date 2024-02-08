@@ -37,3 +37,5 @@ export * from './ui/breadcrymb/Breadcrumb'
 export * from './ui/badges/StatusBadge'
 export * from './ui/badges/PriorityBadge'
 export * from './ui/badges/PriorityBadgeLong'
+
+export * from './project/project-incidences-modal/ProjectTaskIncidenceModal'

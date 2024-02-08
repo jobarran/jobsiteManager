@@ -11,21 +11,31 @@ interface State {
     isTaskModalOpen: boolean;
     taskModalData: Task | null;
     taskModalType: ModalType | undefined
-    openTaskModal: (task:Task | null, taskModalType: ModalType | undefined) => void;
+    openTaskModal: (task: Task | null, taskModalType: ModalType | undefined) => void;
     closeTaskModal: () => void;
     // updateTaskModalData: (task:Task) => void
 
     isSubTaskModalOpen: boolean;
     subTaskModalData: SubTask | null;
     subTaskModalType: ModalType | undefined
-    openSubTaskModal: (subTask:SubTask | null, subTaskModalType:ModalType | undefined) => void;
+    openSubTaskModal: (subTask: SubTask | null, subTaskModalType: ModalType | undefined) => void;
     closeSubTaskModal: () => void;
+
+    isIncidenceModalOpen: boolean;
+    incidenceModalType: IncidenceModalType | undefined
+    openIncidenceModal: (incidenceModalType: IncidenceModalType | undefined) => void;
+    closeIncidenceModal: () => void;
 
 }
 
 enum ModalType {
     Edit = "edit",
     New = "new"
+}
+
+enum IncidenceModalType {
+    Task = "task",
+    Subtask = "subtask"
 }
 
 
@@ -47,5 +57,10 @@ export const useUIStore = create<State>()((set) => ({
     subTaskModalType: undefined,
     openSubTaskModal: (subTask, subTaskModalType) => set({ isSubTaskModalOpen: true, subTaskModalData: subTask, subTaskModalType: subTaskModalType }),
     closeSubTaskModal: () => set({ isSubTaskModalOpen: false, subTaskModalData: null, subTaskModalType: undefined }),
+
+    isIncidenceModalOpen: false,
+    incidenceModalType: undefined,
+    openIncidenceModal: (incidenceModalType) => set({ isIncidenceModalOpen: true, incidenceModalType: incidenceModalType }),
+    closeIncidenceModal: () => set({ isIncidenceModalOpen: false, incidenceModalType: undefined})
 
 }))

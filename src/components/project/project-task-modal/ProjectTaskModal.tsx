@@ -7,10 +7,9 @@ import { useUIStore } from "@/store";
 
 interface Props {
     projectId: string
-    task: Task | null
 }
 
-export const ProjectTaskModal = ({ task, projectId }: Props) => {
+export const ProjectTaskModal = ({ projectId }: Props) => {
 
     const taskModalType = useUIStore(state => state.taskModalType)
     const closeTaskModal = useUIStore(state => state.closeTaskModal)

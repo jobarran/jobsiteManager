@@ -92,7 +92,6 @@ export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) =
 
                 <ProjectTaskModal
                     projectId={projectId}
-                    task={taskModalData}
                 />
 
                 <button

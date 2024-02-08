@@ -1,8 +1,12 @@
 'use client'
 
-import { ModalType } from '@/interfaces'
+import { IncidenceModalType, ModalType, Task } from '@/interfaces'
 import React, { useState } from 'react'
 import { useUIStore } from '@/store'
+import { FaPercentage } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
+import { ProjectTaskIncidenceModal } from '@/components';
+
 
 
 interface Props {
@@ -10,17 +14,23 @@ interface Props {
     handleSearchChange: any,
     handleClearSearch: any,
     projectId: string,
+    tasks: Task[]
 }
 
-export const ProjectTaskTableHeader = ({ searchValue, handleSearchChange, handleClearSearch, projectId }: Props) => {
+export const ProjectTaskTableHeader = ({ searchValue, handleSearchChange, handleClearSearch, tasks, projectId }: Props) => {
 
     const openTaskModal = useUIStore(state => state.openTaskModal)
     const closeSubTaskModal = useUIStore(state => state.closeSubTaskModal)
-
+    const openIncidenceModal = useUIStore(state => state.openIncidenceModal)
 
     const handleOpenModal = () => {
         closeSubTaskModal()
         openTaskModal(null, ModalType.New)
+    };
+
+    const handleOpenIncidenceModal = () => {
+        closeSubTaskModal()
+        openIncidenceModal(IncidenceModalType.Task)
     };
 
     return (
@@ -28,6 +38,8 @@ export const ProjectTaskTableHeader = ({ searchValue, handleSearchChange, handle
 
 
         <div className="relative">
+
+            <ProjectTaskIncidenceModal tasks={tasks} projectId={projectId} />
 
             <div className="flex items-center justify-between pt-2 pb-4 flex-row space-y-0 space-x-4">
                 <div className="w-full md:w-1/2">
@@ -75,12 +87,19 @@ export const ProjectTaskTableHeader = ({ searchValue, handleSearchChange, handle
                     <button
                         className=" flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 border border-gray-300 rounded-lg md:w-auto hover:bg-gray-100 hover:text-primary-700s"
                         type="button"
+                        onClick={handleOpenIncidenceModal}
+                    >
+                        <FaPercentage />
+                        <p className='ml-2'>Incidences</p>
+                    </button>
+
+                    <button
+                        className=" flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 border border-gray-300 rounded-lg md:w-auto hover:bg-gray-100 hover:text-primary-700s"
+                        type="button"
                         onClick={handleOpenModal}
                     >
-                        <svg className="h-3.5 w-3.5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                            <path clipRule="evenodd" fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
-                        </svg>
-                        Add task
+                        <FaPlus />
+                        <p className='ml-2'>Add task</p>
                     </button>
 
                 </div>

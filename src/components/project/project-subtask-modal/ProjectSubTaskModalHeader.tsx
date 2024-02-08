@@ -12,24 +12,24 @@ interface Props {
 export const ProjectSubTaskModalHeader = ({ handleIsEditable }: Props) => {
 
     const closeSubTaskModal = useUIStore(state => state.closeSubTaskModal)
-    const taskModalData = useUIStore(state => state.taskModalData)
+    const subTaskModalData = useUIStore(state => state.subTaskModalData)
 
 
     return (
         <>
             {
-                taskModalData
+                subTaskModalData
                     ?
                     <div className="flex flex-col">
                         <h1 className="flex items-center text-xl md:text-2xl font-extrabold">
-                            {taskModalData.name}
-                            <StatusBadge status={taskModalData.status} />
-                            <PriorityBadge priority={taskModalData.priority} />
+                            {subTaskModalData.name}
+                            <StatusBadge status={subTaskModalData.status} />
+                            <PriorityBadge priority={subTaskModalData.priority} />
                         </h1>
-                        <p className="text-lg font-semibold text-gray-800 mb-1">{taskModalData?.location}</p>
-                        <p className="text-base font-normal text-gray-500">Contractor: {taskModalData?.contractor}</p>
-                        <p className="text-base font-normal text-gray-500">End: {taskModalData?.end}</p>
-                        <p className="text-base font-normal text-gray-500">Incidence: {taskModalData?.incidence}%</p>
+                        <p className="text-lg font-semibold text-gray-800 mb-1">{subTaskModalData?.location}</p>
+                        <p className="text-base font-normal text-gray-500">Contractor: {subTaskModalData?.contractor}</p>
+                        <p className="text-base font-normal text-gray-500">End: {subTaskModalData?.end}</p>
+                        <p className="text-base font-normal text-gray-500">Incidence: {subTaskModalData?.incidence}%</p>
                     </div>
                     :
                     <div className="flex flex-col animate-pulse ">
