@@ -40,7 +40,6 @@ export const ProjectTaskModalAddNewTask = ({ projectId }: Props) => {
     });
 
     const handleValueChange = (newValue: any) => {
-        console.log("newValue:", newValue);
         setValue(newValue);
     }
 

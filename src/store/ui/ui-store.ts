@@ -13,7 +13,6 @@ interface State {
     taskModalType: ModalType | undefined
     openTaskModal: (task: Task | null, taskModalType: ModalType | undefined) => void;
     closeTaskModal: () => void;
-    // updateTaskModalData: (task:Task) => void
 
     isSubTaskModalOpen: boolean;
     subTaskModalData: SubTask | null;
@@ -50,7 +49,6 @@ export const useUIStore = create<State>()((set) => ({
     taskModalType: undefined,
     openTaskModal: (task, taskModalType) => set({ isTaskModalOpen: true, taskModalData: task, taskModalType: taskModalType }),
     closeTaskModal: () => set({ isTaskModalOpen: false, taskModalData: null, taskModalType: undefined }),
-    // updateTaskModalData: (task) => set({taskModalData: task}),
 
     isSubTaskModalOpen: false,
     subTaskModalData: null,

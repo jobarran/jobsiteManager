@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { useUIStore } from '@/store'
 import { FaPercentage } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
-import { ProjectTaskIncidenceModal } from '@/components';
+import { ProjectIncidenceModal, ProjectTaskIncidenceModal } from '@/components';
 
 
 
@@ -39,7 +39,7 @@ export const ProjectTaskTableHeader = ({ searchValue, handleSearchChange, handle
 
         <div className="relative">
 
-            <ProjectTaskIncidenceModal tasks={tasks} projectId={projectId} />
+            <ProjectIncidenceModal tasks={tasks} projectId={projectId} />
 
             <div className="flex items-center justify-between pt-2 pb-4 flex-row space-y-0 space-x-4">
                 <div className="w-full md:w-1/2">

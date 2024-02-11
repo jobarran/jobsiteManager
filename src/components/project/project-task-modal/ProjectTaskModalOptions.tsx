@@ -1,9 +1,9 @@
 import { MdEdit, MdOutlineAdd } from 'react-icons/md';
 import { IoClose } from 'react-icons/io5';
 import { BiMessageRounded } from 'react-icons/bi';
-import { FaListUl } from 'react-icons/fa';
+import { FaListUl, FaPercentage } from 'react-icons/fa';
 import { list } from 'postcss';
-import { ModalType, SubTask } from '@/interfaces';
+import { IncidenceModalType, ModalType, SubTask } from '@/interfaces';
 import { useUIStore } from '@/store';
 
 interface Props {
@@ -15,10 +15,19 @@ export const ProjectTaskModalOptions = ({ setTaskModalOption, taskModalOption }:
 
     const openSubTaskModal = useUIStore(state => state.openSubTaskModal)
     const closeSubTaskModal = useUIStore(state => state.closeSubTaskModal)
-    
+    const openIncidenceModal = useUIStore(state => state.openIncidenceModal)
+    const closeIncidenceModal = useUIStore(state => state.closeIncidenceModal)
+
+
     const handleNewSubTask = () => {
         openSubTaskModal(null, ModalType.New)
     }
+
+    const handleOpenIncidenceModal = () => {
+        closeSubTaskModal()
+        closeIncidenceModal()
+        openIncidenceModal(IncidenceModalType.Subtask)
+    };
 
     return (
 
@@ -31,6 +40,15 @@ export const ProjectTaskModalOptions = ({ setTaskModalOption, taskModalOption }:
             >
                 <MdOutlineAdd size={20} />
                 New
+            </button>
+
+            <button
+                className="text-gray-400 bg-transparent p-2 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 rounded-lg inline-flex justify-center items-center mr-2 "
+                type="button"
+                onClick={handleOpenIncidenceModal}
+            >
+                <FaPercentage />
+                <p className='ml-2'>Incidences</p>
             </button>
 
             <button

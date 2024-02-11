@@ -1,47 +1,48 @@
 'use client'
 
-import { getProjectTasksById } from "@/actions";
-import { updateTaskIncidence } from "@/actions/task/update-task-incidence";
-import { ProjectSubTaskModal, ProjectTaskModalAddNewTask, ProjectTaskModalDetail, ProjectTaskModalDistributionChart, ProjectTaskModalHeader, ProjectTaskModalOptions, ProjectTaskModalSubTaskData, StatusBadge } from "@/components";
-import { ModalType, Task } from "@/interfaces";
+import { SubTask } from "@/interfaces";
 import { useUIStore } from "@/store";
-import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { IoClose } from 'react-icons/io5';
 import { FaSave } from "react-icons/fa";
 import { FaCheckCircle } from "react-icons/fa";
 import { IoAlertCircle } from "react-icons/io5";
-
+import { updateSubTaskIncidence } from "@/actions";
 
 interface Props {
-    tasks: Task[],
-    projectId: string
+    subtasks: SubTask[],
+    taskId: string
 }
 
-export const ProjectTaskIncidenceModal = ({ tasks, projectId }: Props) => {
+export const ProjectSubTaskIncidenceModal = ({ subtasks, taskId }:Props) => {
+
+    console.log({subtasks: subtasks, taskId: taskId})
 
     const isIncidenceModalOpen = useUIStore(state => state.isIncidenceModalOpen)
     const closeIncidenceModal = useUIStore(state => state.closeIncidenceModal)
 
-    const [updatedTasks, setUpdatedTasks] = useState<Task[]>(tasks);
+    const [updatedSubTasks, setUpdatedSubTasks] = useState<SubTask[]>( subtasks );
     const [isIncidenceSumValid, setIsIncidenceSumValid] = useState<boolean>(true);
 
     useEffect(() => {
+      setUpdatedSubTasks(subtasks)
+    }, [subtasks])
+    
+
+    useEffect(() => {
         setIsIncidenceSumValid(checkTaskIncidenceSum());
-    }, [updatedTasks])
-
-
+    }, [updatedSubTasks])
 
     const handleUpdateTaskIncidence = () => {
-        updateTaskIncidence(updatedTasks, projectId);
+        updateSubTaskIncidence(updatedSubTasks, taskId );
         closeIncidenceModal();
-        window.location.replace(`/project/${projectId}/task`)
+        // window.location.replace(`/project/${projectId}/task`)
     };
 
     const handleTaskInputChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         console.log(value);
-        setUpdatedTasks(prevTasks => {
+        setUpdatedSubTasks(prevTasks => {
             if (index < 0 || index >= prevTasks.length) {
                 console.error('Invalid index:', index);
                 return prevTasks;
@@ -59,12 +60,12 @@ export const ProjectTaskIncidenceModal = ({ tasks, projectId }: Props) => {
     };
 
     const checkTaskIncidenceSum = () => {
-        const sum = updatedTasks.reduce((acc, task) => acc + parseInt(task.incidence), 0);
+        const sum = updatedSubTasks.reduce((acc, task) => acc + parseInt(task.incidence), 0);
         return sum === 100;
     };
 
     const incidenceSum = () => {
-        return updatedTasks.reduce((acc, task) => acc + parseInt(task.incidence), 0);
+        return updatedSubTasks.reduce((acc, task) => acc + parseInt(task.incidence), 0);
     }
 
     const modalClasses = `fixed inset-0 flex justify-center items-center bg-opacity-50 z-50 transition-opacity duration-300 ${isIncidenceModalOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`;
@@ -128,13 +129,13 @@ export const ProjectTaskIncidenceModal = ({ tasks, projectId }: Props) => {
                             </div>
                         </div>
                         <div className="overflow-auto max-h-[70vh]">
-                            {updatedTasks.map((task: Task, index: number) => (
+                            {updatedSubTasks.map((subtask: SubTask, index: number) => (
                                 <div key={index} className={`flex items-center p-2 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}`}>
-                                    <p className="flex-grow">{task.name}</p>
+                                    <p className="flex-grow">{subtask.name}</p>
                                     <input
                                         type="text"
                                         name="status"
-                                        value={task.incidence}
+                                        value={subtask.incidence}
                                         onChange={(e) => handleTaskInputChange(index, e)}
                                         onInput={(e) => {
                                             const input = e.target as HTMLInputElement;

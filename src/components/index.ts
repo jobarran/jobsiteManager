@@ -39,3 +39,5 @@ export * from './ui/badges/PriorityBadge'
 export * from './ui/badges/PriorityBadgeLong'
 
 export * from './project/project-incidences-modal/ProjectTaskIncidenceModal'
+export * from './project/project-incidences-modal/ProjectSubTaskIncidenceModal'
+export * from './project/project-incidences-modal/ProjectIncidenceModal'
