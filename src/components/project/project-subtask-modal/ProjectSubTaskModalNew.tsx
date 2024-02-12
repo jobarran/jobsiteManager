@@ -1,6 +1,6 @@
 'use client'
 
-import { ModalType, SubTaskPriority, SubTaskStatus, Task } from "@/interfaces";
+import { ModalType, SubTask, SubTaskPriority, SubTaskStatus, Task } from "@/interfaces";
 import { createSubTask, getTaskById } from "@/actions";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -44,6 +44,8 @@ export const ProjectSubTaskModalNew = () => {
     const setActiveTaskId = useProjectStore(state => state.setActiveTaskId)
     const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
     const activeTaskId = useProjectStore(state => state.activeTaskId)
+    const setProjectTasks = useProjectStore(state => state.setProjectTasks)
+
 
     const taskModalData = activeProjectTasks?.find(task => task.id === activeTaskId)
 
@@ -56,6 +58,30 @@ export const ProjectSubTaskModalNew = () => {
         setValue(newValue);
     }
 
+    const updateProjectTasks = (subTask: SubTask | undefined) => {
+        if (subTask === undefined) {
+            console.error("subTask is undefined");
+            return;
+        }
+
+        const taskToUpdate = activeProjectTasks?.find(task => task.id === activeTaskId);
+
+        if (!taskToUpdate) {
+            console.error("Task not found");
+            return;
+        }
+
+        const updatedSubTasks = [...taskToUpdate.subTasks, subTask];
+
+        const updatedActiveProjectTasks = (activeProjectTasks || []).map(task => {
+            if (task.id === activeTaskId) {
+                return { ...task, subTasks: updatedSubTasks };
+            }
+            return task;
+        });
+
+        setProjectTasks(updatedActiveProjectTasks);
+    };
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
 
@@ -83,6 +109,7 @@ export const ProjectSubTaskModalNew = () => {
             }
 
             const { task } = await getTaskById(taskModalData?.id!);
+            const subTask = resp.subTask
 
             if (task === undefined) {
                 console.log('Task not found');
@@ -91,6 +118,7 @@ export const ProjectSubTaskModalNew = () => {
             setActiveTaskId(task.id)
             openTaskModal(ModalType.Edit)
             closeSubTaskModal();
+            updateProjectTasks(subTask)
 
         } else {
             console.log('taskModalData is null');

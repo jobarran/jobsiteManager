@@ -16,7 +16,7 @@ export const ProjectIncidenceModal = ({ tasks, projectId }: Props) => {
     const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
     const activeTaskId = useProjectStore(state => state.activeTaskId)
 
-    const taskModalData = activeProjectTasks?.find(task => task.id === activeTaskId)
+    const taskModalData = activeProjectTasks?.find(task => task.id === activeTaskId)       
 
     return (
         <>
@@ -26,7 +26,7 @@ export const ProjectIncidenceModal = ({ tasks, projectId }: Props) => {
                     ? <ProjectTaskIncidenceModal tasks={tasks} projectId={projectId} />
                     :
                     taskModalData
-                        ? <ProjectSubTaskIncidenceModal subtasks={taskModalData.subTasks} taskId={taskModalData.id ? taskModalData.id : ''} />
+                        ? <ProjectSubTaskIncidenceModal />
                         : <></>
             }
         </>

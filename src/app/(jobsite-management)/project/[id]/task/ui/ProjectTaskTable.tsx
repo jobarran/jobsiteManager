@@ -24,8 +24,15 @@ export const ProjectTaskTable = ({ tasks, projectId }: Props) => {
     useEffect(() => {
         if (!activeProjectTasks) {
             setProjectTasks(tasks)
+            console.log('fetching tasks')
         }
     }, [])
+
+    useEffect(() => {
+        setNewData(activeProjectTasks)
+        console.log('RE-fetching tasks')
+    }, [activeProjectTasks])
+
 
 
     const head = ['Location', 'Name', 'Status', 'Progress', 'Incidence', 'Contractor', 'End', 'Priority']

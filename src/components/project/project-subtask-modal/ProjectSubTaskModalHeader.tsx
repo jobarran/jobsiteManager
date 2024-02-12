@@ -3,6 +3,7 @@ import { MdEdit } from 'react-icons/md';
 import { IoClose } from 'react-icons/io5';
 import { PriorityBadge } from "@/components";
 import { useProjectStore } from "@/store";
+import { GoAlert } from 'react-icons/go';
 
 interface Props {
     handleIsEditable: () => void
@@ -33,8 +34,17 @@ export const ProjectSubTaskModalHeader = ({ handleIsEditable }: Props) => {
                         <p className="text-lg font-semibold text-gray-800 mb-1">{subTaskModalData?.location}</p>
                         <p className="text-base font-normal text-gray-500">Contractor: {subTaskModalData?.contractor}</p>
                         <p className="text-base font-normal text-gray-500">End: {subTaskModalData?.end}</p>
-                        <p className="text-base font-normal text-gray-500">Incidence: {subTaskModalData?.incidence}%</p>
-                    </div>
+                        <span className="flex items-center">
+                            {subTaskModalData?.incidence === '0' ? (
+                                <div className="text-red-600 mr-2">
+                                    <GoAlert />
+                                </div>
+                            ) : null}
+                            <p className="flex text-base font-normal text-gray-500">
+                                Incidence: {subTaskModalData?.incidence}%
+                            </p>
+
+                        </span>                    </div>
                     :
                     <div className="flex flex-col animate-pulse ">
                         <div className="h-6 w-64 mb-2 bg-slate-200 rounded"></div>

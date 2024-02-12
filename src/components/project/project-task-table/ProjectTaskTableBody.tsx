@@ -9,6 +9,7 @@ import { ModalType } from "@/interfaces";
 import { useProjectStore } from "@/store";
 import { ProjectTaskModal } from "@/components";
 import { handlePriorityBgColor, handlePriorityTextColor } from "@/utils";
+import { GoAlert } from "react-icons/go";
 
 
 interface Props {
@@ -31,7 +32,7 @@ export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) =
     const filteredData = data.filter((item: any) => {
         const desiredStatus = status;
         return item.status === desiredStatus;
-    });
+    }).sort((a: any, b: any) => b.progress - a.progress);
 
     const handleHideTable = () => {
         setHideTable(!hideTable)
@@ -68,6 +69,13 @@ export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) =
                 break;
         }
     }
+
+    const handleTaskIncidence = (incidence: string) => {
+        if (incidence === '0') {
+            return <div className="text-red-600"><GoAlert/></div>
+        }
+        return <span>{incidence} %</span>;
+    };
 
     const columnWidths = ['auto', '200px', '150px', '250px', '100px', '150px', '150px', '400px'];
 
@@ -136,15 +144,14 @@ export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) =
                                                 <div className="w-full bg-neutral-100 flex items-center">
                                                     <div
                                                         className="bg-sky-300 pt-1 pb-0.5 text-center text-xs font-bold leading-none text-sky-700"
-                                                        style={{ width: `${item.progress}%` }} // Ensure item.progress is a valid percentage
+                                                        style={{ width: `${item.progress}%` }}
                                                     >
                                                         {item.progress}%
                                                     </div>
                                                 </div>
                                             </td>
                                             <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
-                                                {item.incidence} %
-                                            </td>
+                                                {handleTaskIncidence(item.incidence)}                                            </td>
                                             <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
                                                 {item.contractor}
                                             </td>

@@ -20,7 +20,7 @@ export const handlePriorityBgColor = (priority: TaskPriority) => {
         case 'high':
             return 'bg-amber-100'
         case 'urgent':
-            return 'bg-red-300'
+            return 'bg-red-100'
         default:
             break;
     }
