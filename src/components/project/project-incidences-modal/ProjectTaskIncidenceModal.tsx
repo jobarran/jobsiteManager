@@ -40,7 +40,6 @@ export const ProjectTaskIncidenceModal = ({ tasks, projectId }: Props) => {
 
     const handleTaskInputChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
-        console.log(value);
         setUpdatedTasks(prevTasks => {
             if (index < 0 || index >= prevTasks.length) {
                 console.error('Invalid index:', index);

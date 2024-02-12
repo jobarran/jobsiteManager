@@ -1,7 +1,7 @@
 'use client'
 
-import { SubTask } from "@/interfaces";
-import { useUIStore } from "@/store";
+import { SubTask, Task } from "@/interfaces";
+import { useProjectStore, useUIStore } from "@/store";
 import { useEffect, useState } from "react";
 import { IoClose } from 'react-icons/io5';
 import { FaSave } from "react-icons/fa";
@@ -14,34 +14,44 @@ interface Props {
     taskId: string
 }
 
-export const ProjectSubTaskIncidenceModal = ({ subtasks, taskId }:Props) => {
-
-    console.log({subtasks: subtasks, taskId: taskId})
+export const ProjectSubTaskIncidenceModal = ({ taskId }: Props) => {
 
     const isIncidenceModalOpen = useUIStore(state => state.isIncidenceModalOpen)
     const closeIncidenceModal = useUIStore(state => state.closeIncidenceModal)
+    const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
+    const setProjectTasks = useProjectStore(state => state.setProjectTasks)
 
-    const [updatedSubTasks, setUpdatedSubTasks] = useState<SubTask[]>( subtasks );
+    const activeSubTask = () => {
+        const selectedTask = activeProjectTasks?.find(task => task.id === taskId);
+        return selectedTask?.subTasks || [];
+    }
+
+    const [updatedSubTasks, setUpdatedSubTasks] = useState<SubTask[]>(activeSubTask);
     const [isIncidenceSumValid, setIsIncidenceSumValid] = useState<boolean>(true);
 
-    useEffect(() => {
-      setUpdatedSubTasks(subtasks)
-    }, [subtasks])
-    
 
     useEffect(() => {
         setIsIncidenceSumValid(checkTaskIncidenceSum());
     }, [updatedSubTasks])
 
+    const updateProjectTasks = (updatedSubTasks: SubTask[]) => {
+        const updatedProjectTasks = activeProjectTasks!.map(task => {
+            if (task.id === taskId) {
+                return { ...task, subTasks: updatedSubTasks };
+            }
+            return task;
+        });
+        setProjectTasks(updatedProjectTasks);
+    };
+
     const handleUpdateTaskIncidence = () => {
-        updateSubTaskIncidence(updatedSubTasks, taskId );
+        updateSubTaskIncidence(updatedSubTasks, taskId);
+        updateProjectTasks(updatedSubTasks)
         closeIncidenceModal();
-        // window.location.replace(`/project/${projectId}/task`)
     };
 
     const handleTaskInputChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
-        console.log(value);
         setUpdatedSubTasks(prevTasks => {
             if (index < 0 || index >= prevTasks.length) {
                 console.error('Invalid index:', index);

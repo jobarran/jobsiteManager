@@ -27,7 +27,6 @@ export const getProjectTasksById = async (id: string) => {
         });
 
         if (!tasks.length) throw `Cant find task with project id: ${id}`;
-
         return {
             ok: true,
             tasks: tasks,

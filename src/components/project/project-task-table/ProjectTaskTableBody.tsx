@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AiFillDownCircle } from "react-icons/ai"
 import { BiMessageRounded } from "react-icons/bi";
 import { FaListUl } from "react-icons/fa";
@@ -22,12 +22,9 @@ export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) =
 
 
     const openTaskModal = useUIStore(state => state.openTaskModal)
-    const taskModalData = useUIStore(state => state.taskModalData)
     const closeSubTaskModal = useUIStore(state => state.closeSubTaskModal)
 
     const [hideTable, setHideTable] = useState(false)
-    const [hideSubTasks, setHideSubTasks] = useState(true)
-    const [subTasksVisibility, setSubTasksVisibility] = useState(new Array(data.length).fill(false));
 
     const filteredData = data.filter((item: any) => {
         const desiredStatus = status;
@@ -64,19 +61,6 @@ export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) =
                 return 'border-l-amber-600'
             case 'finished':
                 return 'border-l-lime-600'
-            default:
-                break;
-        }
-    }
-
-    const handleStatusSubColor = () => {
-        switch (status) {
-            case 'ongoing':
-                return 'border-l-sky-100'
-            case 'upcoming':
-                return 'border-l-amber-100'
-            case 'finished':
-                return 'border-l-lime-100'
             default:
                 break;
         }

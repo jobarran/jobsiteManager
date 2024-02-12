@@ -1,11 +1,8 @@
 'use client'
 
-import { getProjectById } from "@/actions";
-import { Project } from "@/interfaces";
-import { useProjectStore } from "@/store";
 import { truncateString } from "@/utils";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AiFillDownCircle } from "react-icons/ai"
 
 
@@ -18,7 +15,6 @@ interface Props {
 export const ProjectTableBody = ({ data, head, status }: Props) => {
 
     const [hideTable, setHideTable] = useState(false)
-    const setProject = useProjectStore((state) => state.setProject);
 
     const filteredData = data.filter((item: any) => {
         const desiredStatus = status;

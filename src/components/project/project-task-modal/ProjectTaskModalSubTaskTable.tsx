@@ -1,5 +1,5 @@
 import { ModalType, SubTask, SubTaskStatus } from "@/interfaces";
-import { useUIStore } from "@/store"
+import { useProjectStore, useUIStore } from "@/store"
 import { handlePriorityBgColor, handlePriorityTextColor, handleStatusBorderColor, parseNumberFromString } from "@/utils";
 
 
@@ -7,7 +7,12 @@ export const ProjectTaskModalSubTaskTable = () => {
 
     const taskModalData = useUIStore(state => state.taskModalData)
     const openSubTaskModal = useUIStore(state => state.openSubTaskModal)
+    const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
 
+    console.log({
+        taskmodalData: taskModalData,
+        activeProjectTasks: activeProjectTasks
+    })
 
     const sortByStatus = (a: SubTask, b: SubTask): number => {
         const statusOrder: Record<SubTaskStatus, number> = { ongoing: 1, upcoming: 2, finished: 3, '': 4 };

@@ -2,9 +2,10 @@
 
 import { ProjectTableBody, ProjectTableHeader, ProjectTaskTableBody, ProjectTaskTableHeader } from '@/components'
 import useQuickSearch from '@/hooks/useQuickSearch'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Project, SubTask } from '@/interfaces'
 import { getProgressBySubTaskIncidence } from '@/utils'
+import { useProjectStore } from '@/store'
 
 interface Props {
     tasks: any,
@@ -13,8 +14,19 @@ interface Props {
 
 export const ProjectTaskTable = ({tasks, projectId }: Props) => {
 
-    const [filteredData, setSearch, clearSearch, setNewData] = useQuickSearch(tasks);
     const [searchValue, setSearchValue] = useState('');
+
+    const setProjectTasks = useProjectStore(state => state.setProjectTasks)
+    const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
+    
+    const [filteredData, setSearch, clearSearch, setNewData] = useQuickSearch(activeProjectTasks || tasks);
+
+    useEffect(() => {
+      setProjectTasks(tasks)
+      console.log('fetching tasks')
+    }, [])
+    
+
 
     const head = [ 'Location', 'Name', 'Status', 'Progress', 'Incidence', 'Contractor', 'End', 'Priority']
 
