@@ -8,7 +8,6 @@ import { useSession } from 'next-auth/react';
 import { getCompanyByUserActiveCompany, logout } from '@/actions';
 import { NameAndSideToggle } from './NameAndSideToggle';
 import { useCompanyStore } from '@/store';
-import { redirect, useRouter } from 'next/navigation';
 
 export const TopMenu = () => {
 
@@ -29,7 +28,6 @@ export const TopMenu = () => {
             companyLogo: companyLogo ?? 'default-logo-url',
           };
           setActiveCompany(updatedCompany);
-          console.log({ setActiveCompany: updatedCompany })
         } 
       } 
     };

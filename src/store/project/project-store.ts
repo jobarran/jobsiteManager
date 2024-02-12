@@ -16,15 +16,13 @@ interface State {
     setActiveSubTaskId: (id:string) => void
 
     isTaskModalOpen: boolean;
-    taskModalData: Task | null;
     taskModalType: ModalType | undefined
-    openTaskModal: (task: Task | null, taskModalType: ModalType | undefined) => void;
+    openTaskModal: (taskModalType: ModalType | undefined) => void;
     closeTaskModal: () => void;
 
     isSubTaskModalOpen: boolean;
-    subTaskModalData: SubTask | null;
     subTaskModalType: ModalType | undefined
-    openSubTaskModal: (subTask: SubTask | null, subTaskModalType: ModalType | undefined) => void;
+    openSubTaskModal: (subTaskModalType: ModalType | undefined) => void;
     closeSubTaskModal: () => void;
 
     isIncidenceModalOpen: boolean;
@@ -58,16 +56,15 @@ export const useProjectStore = create<State>()((set) => ({
     setActiveSubTaskId: (id) => set({activeSubTaskId: id}),
 
     isTaskModalOpen: false,
-    taskModalData: null,
     taskModalType: undefined,
-    openTaskModal: (task, taskModalType) => set({ isTaskModalOpen: true, taskModalData: task, taskModalType: taskModalType }),
-    closeTaskModal: () => set({ isTaskModalOpen: false, taskModalData: null, taskModalType: undefined }),
+    openTaskModal: (taskModalType) => set({ isTaskModalOpen: true, taskModalType: taskModalType }),
+    closeTaskModal: () => set({ isTaskModalOpen: false, taskModalType: undefined, activeTaskId: '', activeSubTaskId: '' }),
 
     isSubTaskModalOpen: false,
     subTaskModalData: null,
     subTaskModalType: undefined,
-    openSubTaskModal: (subTask, subTaskModalType) => set({ isSubTaskModalOpen: true, subTaskModalData: subTask, subTaskModalType: subTaskModalType }),
-    closeSubTaskModal: () => set({ isSubTaskModalOpen: false, subTaskModalData: null, subTaskModalType: undefined }),
+    openSubTaskModal: (subTaskModalType) => set({ isSubTaskModalOpen: true, subTaskModalType: subTaskModalType }),
+    closeSubTaskModal: () => set({ isSubTaskModalOpen: false, subTaskModalType: undefined, activeSubTaskId: '' }),
 
     isIncidenceModalOpen: false,
     incidenceModalType: undefined,

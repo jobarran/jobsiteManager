@@ -1,18 +1,18 @@
 import { ModalType, SubTask, SubTaskStatus } from "@/interfaces";
-import { useProjectStore, useUIStore } from "@/store"
+import { useProjectStore } from "@/store"
 import { handlePriorityBgColor, handlePriorityTextColor, handleStatusBorderColor, parseNumberFromString } from "@/utils";
 
 
 export const ProjectTaskModalSubTaskTable = () => {
 
-    const taskModalData = useUIStore(state => state.taskModalData)
-    const openSubTaskModal = useUIStore(state => state.openSubTaskModal)
+    // const taskModalData = useProjectStore(state => state.taskModalData)
+    const openSubTaskModal = useProjectStore(state => state.openSubTaskModal)
+    const activeTaskId = useProjectStore(state => state.activeTaskId)
     const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
+    const setActiveSubTaskId = useProjectStore(state => state.setActiveSubTaskId)
 
-    console.log({
-        taskmodalData: taskModalData,
-        activeProjectTasks: activeProjectTasks
-    })
+
+    const taskModalData = activeProjectTasks?.find(task => task.id === activeTaskId)
 
     const sortByStatus = (a: SubTask, b: SubTask): number => {
         const statusOrder: Record<SubTaskStatus, number> = { ongoing: 1, upcoming: 2, finished: 3, '': 4 };
@@ -21,12 +21,13 @@ export const ProjectTaskModalSubTaskTable = () => {
 
     const sortedSubTask = taskModalData?.subTasks.slice().sort(sortByStatus);
 
-
     const head = ['Name', 'Progress', 'End', 'Priority']
     const columnWidths = ['auto', '100px', '100px', '100px', '100px'];
 
     const handleOpenSubTaskModal = (subTask:SubTask) => {
-        openSubTaskModal(subTask, ModalType.Edit)
+        if (subTask.id)
+        setActiveSubTaskId(subTask.id)
+        openSubTaskModal(ModalType.Edit)
     }
 
     return (

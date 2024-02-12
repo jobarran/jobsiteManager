@@ -1,13 +1,17 @@
 'use client'
 
-import { useUIStore } from '@/store';
+import { useProjectStore } from '@/store';
 import { getProgressBySubTaskIncidence } from '@/utils';
 import React, { useState, useEffect } from 'react';
 
 const ProjectTaskModalProgress = () => {
 
-    const taskModalData = useUIStore(state => state.taskModalData)
+    // const taskModalData = useProjectStore(state => state.taskModalData)
+    const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
+    const activeTaskId = useProjectStore(state => state.activeTaskId)
 
+    const taskModalData = activeProjectTasks?.find(task => task.id === activeTaskId)
+    
     const progressBySubTaskIncidence = getProgressBySubTaskIncidence(taskModalData?.subTasks)
     const [progress, setProgress] = useState(0);
 

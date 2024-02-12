@@ -1,11 +1,8 @@
 'use client'
 
-import { getProjectTasksById } from "@/actions";
 import { updateTaskIncidence } from "@/actions/task/update-task-incidence";
-import { ProjectSubTaskModal, ProjectTaskModalAddNewTask, ProjectTaskModalDetail, ProjectTaskModalDistributionChart, ProjectTaskModalHeader, ProjectTaskModalOptions, ProjectTaskModalSubTaskData, StatusBadge } from "@/components";
-import { ModalType, Task } from "@/interfaces";
-import { useUIStore } from "@/store";
-import clsx from "clsx";
+import { Task } from "@/interfaces";
+import { useProjectStore } from "@/store";
 import { useEffect, useState } from "react";
 import { IoClose } from 'react-icons/io5';
 import { FaSave } from "react-icons/fa";
@@ -20,8 +17,8 @@ interface Props {
 
 export const ProjectTaskIncidenceModal = ({ tasks, projectId }: Props) => {
 
-    const isIncidenceModalOpen = useUIStore(state => state.isIncidenceModalOpen)
-    const closeIncidenceModal = useUIStore(state => state.closeIncidenceModal)
+    const isIncidenceModalOpen = useProjectStore(state => state.isIncidenceModalOpen)
+    const closeIncidenceModal = useProjectStore(state => state.closeIncidenceModal)
 
     const [updatedTasks, setUpdatedTasks] = useState<Task[]>(tasks);
     const [isIncidenceSumValid, setIsIncidenceSumValid] = useState<boolean>(true);

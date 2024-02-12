@@ -1,8 +1,8 @@
 'use client'
 
-import { createSubTask, createTask } from "@/actions";
+import { createTask } from "@/actions";
 import { TaskPriority, TaskStatus } from "@/interfaces";
-import { useUIStore } from "@/store";
+import { useProjectStore } from "@/store";
 import clsx from "clsx";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -29,7 +29,7 @@ type FormInputs = {
 
 export const ProjectTaskModalAddNewTask = ({ projectId }: Props) => {
 
-    const closeTaskModal = useUIStore(state => state.closeTaskModal)
+    const closeTaskModal = useProjectStore(state => state.closeTaskModal)
 
     const [errorMessage, setErrorMessage] = useState('')
     const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>()

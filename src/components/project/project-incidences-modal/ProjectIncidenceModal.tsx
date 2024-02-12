@@ -1,17 +1,8 @@
 'use client'
 
-import { getProjectTasksById } from "@/actions";
-import { updateTaskIncidence } from "@/actions/task/update-task-incidence";
 import { ProjectSubTaskIncidenceModal, ProjectSubTaskModal, ProjectTaskIncidenceModal, ProjectTaskModalAddNewTask, ProjectTaskModalDetail, ProjectTaskModalDistributionChart, ProjectTaskModalHeader, ProjectTaskModalOptions, ProjectTaskModalSubTaskData, StatusBadge } from "@/components";
-import { ModalType, Task } from "@/interfaces";
-import { useUIStore } from "@/store";
-import clsx from "clsx";
-import { useEffect, useState } from "react";
-import { IoClose } from 'react-icons/io5';
-import { FaSave } from "react-icons/fa";
-import { FaCheckCircle } from "react-icons/fa";
-import { IoAlertCircle } from "react-icons/io5";
-
+import { Task } from "@/interfaces";
+import { useProjectStore } from "@/store";
 
 interface Props {
     tasks: Task[],
@@ -20,8 +11,12 @@ interface Props {
 
 export const ProjectIncidenceModal = ({ tasks, projectId }: Props) => {
 
-    const incidenceModalType = useUIStore(state => state.incidenceModalType)
-    const taskModalData = useUIStore(state => state.taskModalData)
+    const incidenceModalType = useProjectStore(state => state.incidenceModalType)
+    // const taskModalData = useProjectStore(state => state.taskModalData)
+    const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
+    const activeTaskId = useProjectStore(state => state.activeTaskId)
+
+    const taskModalData = activeProjectTasks?.find(task => task.id === activeTaskId)
 
     return (
         <>

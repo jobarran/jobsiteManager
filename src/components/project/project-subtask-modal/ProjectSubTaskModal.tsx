@@ -1,35 +1,15 @@
 'use client'
 
-import { ModalType, SubTaskPriority, SubTaskStatus, Task } from "@/interfaces";
-import { MdEdit } from 'react-icons/md';
-import { IoClose } from 'react-icons/io5';
-import { createSubTask } from "@/actions";
-import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import clsx from "clsx";
-import Datepicker from "react-tailwindcss-datepicker";
-import { useUIStore } from "@/store";
+import { ModalType } from "@/interfaces";
+import { useProjectStore } from "@/store";
 import { ProjectSubTaskModalNew } from "./ProjectSubTaskModalNew";
 import { ProjectSubTaskModalDetail } from "./ProjectSubTaskModalDetail";
 
 
-type FormInputs = {
-    name: string,
-    location: string
-    contractor: string
-    start: string
-    end: string
-    description: string
-    priority: SubTaskPriority
-    status: SubTaskStatus
-    taskId: string
-}
-
-
 export const ProjectSubTaskModal = () => {
 
-    const subTaskModalType = useUIStore(state => state.subTaskModalType)
-    const isSubTaskModalOpen = useUIStore(state => state.isSubTaskModalOpen)
+    const subTaskModalType = useProjectStore(state => state.subTaskModalType)
+    const isSubTaskModalOpen = useProjectStore(state => state.isSubTaskModalOpen)
 
 
     const modalClasses = isSubTaskModalOpen

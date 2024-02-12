@@ -1,7 +1,7 @@
 'use client'
 
-import { SubTask, Task } from "@/interfaces";
-import { useProjectStore, useUIStore } from "@/store";
+import { SubTask } from "@/interfaces";
+import { useProjectStore } from "@/store";
 import { useEffect, useState } from "react";
 import { IoClose } from 'react-icons/io5';
 import { FaSave } from "react-icons/fa";
@@ -9,24 +9,24 @@ import { FaCheckCircle } from "react-icons/fa";
 import { IoAlertCircle } from "react-icons/io5";
 import { updateSubTaskIncidence } from "@/actions";
 
-interface Props {
-    subtasks: SubTask[],
-    taskId: string
-}
+export const ProjectSubTaskIncidenceModal = () => {
 
-export const ProjectSubTaskIncidenceModal = ({ taskId }: Props) => {
-
-    const isIncidenceModalOpen = useUIStore(state => state.isIncidenceModalOpen)
-    const closeIncidenceModal = useUIStore(state => state.closeIncidenceModal)
+    const [updatedSubTasks, setUpdatedSubTasks] = useState<SubTask[]>([]);
+    const isIncidenceModalOpen = useProjectStore(state => state.isIncidenceModalOpen)
+    const closeIncidenceModal = useProjectStore(state => state.closeIncidenceModal)
     const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
     const setProjectTasks = useProjectStore(state => state.setProjectTasks)
+    const activeTaskId = useProjectStore(state => state.activeTaskId)
 
-    const activeSubTask = () => {
-        const selectedTask = activeProjectTasks?.find(task => task.id === taskId);
-        return selectedTask?.subTasks || [];
-    }
 
-    const [updatedSubTasks, setUpdatedSubTasks] = useState<SubTask[]>(activeSubTask);
+    const TaskModalData = activeProjectTasks?.find(task => task.id === activeTaskId)?.subTasks
+
+    useEffect(() => {
+        if (TaskModalData)
+        setUpdatedSubTasks(TaskModalData)
+    }, [TaskModalData])
+
+    // const [updatedSubTasks, setUpdatedSubTasks] = useState<SubTask[] | SubTask>(TaskModalData);
     const [isIncidenceSumValid, setIsIncidenceSumValid] = useState<boolean>(true);
 
 
@@ -36,7 +36,7 @@ export const ProjectSubTaskIncidenceModal = ({ taskId }: Props) => {
 
     const updateProjectTasks = (updatedSubTasks: SubTask[]) => {
         const updatedProjectTasks = activeProjectTasks!.map(task => {
-            if (task.id === taskId) {
+            if (task.id === activeTaskId) {
                 return { ...task, subTasks: updatedSubTasks };
             }
             return task;
@@ -45,7 +45,7 @@ export const ProjectSubTaskIncidenceModal = ({ taskId }: Props) => {
     };
 
     const handleUpdateTaskIncidence = () => {
-        updateSubTaskIncidence(updatedSubTasks, taskId);
+        updateSubTaskIncidence(updatedSubTasks, activeTaskId);
         updateProjectTasks(updatedSubTasks)
         closeIncidenceModal();
     };

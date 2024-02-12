@@ -1,18 +1,20 @@
 'use client'
 
-import { Task } from '@/interfaces';
-import { useUIStore } from '@/store';
+import { useProjectStore } from '@/store';
 import { countSubtasksWithStatus } from '@/utils';
-import React, { useState, useEffect } from 'react';
 
 export const ProjectTaskModalSubTaskData = () => {
 
-    const taskModalData = useUIStore(state => state.taskModalData)
+    // const taskModalData = useProjectStore(state => state.taskModalData)
+    const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
+    const activeTaskId = useProjectStore(state => state.activeTaskId)
 
+    const taskModalData = activeProjectTasks?.find(task => task.id === activeTaskId)
 
     const upcomingTasks = countSubtasksWithStatus(taskModalData?.subTasks, 'upcoming')
     const ongoingTasks = countSubtasksWithStatus(taskModalData?.subTasks, 'ongoing')
     const finishedTasks = countSubtasksWithStatus(taskModalData?.subTasks, 'finished')
+    
 
     const statusBgColor = (status:any) => {
         switch (status) {

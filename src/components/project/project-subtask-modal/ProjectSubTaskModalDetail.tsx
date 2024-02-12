@@ -1,9 +1,6 @@
 'use client'
 
-import { PriorityBadge, ProjectSubTaskModalHeader, StatusBadge } from "@/components";
-import { useUIStore } from "@/store";
-import { MdEdit } from 'react-icons/md';
-import { IoClose } from 'react-icons/io5';
+import { ProjectSubTaskModalHeader } from "@/components";
 import { useState } from "react";
 
 

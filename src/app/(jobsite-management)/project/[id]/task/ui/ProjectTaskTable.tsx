@@ -12,23 +12,23 @@ interface Props {
     projectId: string,
 }
 
-export const ProjectTaskTable = ({tasks, projectId }: Props) => {
+export const ProjectTaskTable = ({ tasks, projectId }: Props) => {
 
     const [searchValue, setSearchValue] = useState('');
 
     const setProjectTasks = useProjectStore(state => state.setProjectTasks)
     const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
-    
+
     const [filteredData, setSearch, clearSearch, setNewData] = useQuickSearch(activeProjectTasks || tasks);
 
     useEffect(() => {
-      setProjectTasks(tasks)
-      console.log('fetching tasks')
+        if (!activeProjectTasks) {
+            setProjectTasks(tasks)
+        }
     }, [])
-    
 
 
-    const head = [ 'Location', 'Name', 'Status', 'Progress', 'Incidence', 'Contractor', 'End', 'Priority']
+    const head = ['Location', 'Name', 'Status', 'Progress', 'Incidence', 'Contractor', 'End', 'Priority']
 
     const data = filteredData ? filteredData.map((task) => ({
         id: task.id,

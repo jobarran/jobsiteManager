@@ -1,12 +1,10 @@
 'use client'
 
-import { ProjectSubTaskModal, ProjectTaskModalAddNewTask, ProjectTaskModalDistributionChart, ProjectTaskModalHeader, ProjectTaskModalOptions, ProjectTaskModalSubTaskData, StatusBadge } from "@/components";
-import { ModalType, Task } from "@/interfaces";
+import { ProjectTaskModalDistributionChart, ProjectTaskModalHeader, ProjectTaskModalOptions, ProjectTaskModalSubTaskData, StatusBadge } from "@/components";
 import { useState } from "react";
 
 import ProjectTaskModalProgress from "./ProjectTaskModalProgress";
 import { ProjectTaskModalSubTaskTable } from "./ProjectTaskModalSubTaskTable";
-import { useUIStore } from "@/store";
 
 
 export const ProjectTaskModalDetail = () => {

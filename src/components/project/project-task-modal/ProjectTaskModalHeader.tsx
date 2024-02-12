@@ -1,9 +1,8 @@
-import { Task } from "@/interfaces"
 import { StatusBadge } from '../../ui/badges/StatusBadge';
 import { MdEdit } from 'react-icons/md';
 import { IoClose } from 'react-icons/io5';
 import { PriorityBadge } from "@/components";
-import { useUIStore } from "@/store";
+import { useProjectStore } from "@/store";
 
 interface Props {
     handleIsEditable: () => void
@@ -11,9 +10,12 @@ interface Props {
 
 export const ProjectTaskModalHeader = ({ handleIsEditable }: Props) => {
 
-    const taskModalData = useUIStore(state => state.taskModalData)
-    const closeTaskModal = useUIStore(state => state.closeTaskModal)
+    const closeTaskModal = useProjectStore(state => state.closeTaskModal)
 
+    const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
+    const activeTaskId = useProjectStore(state => state.activeTaskId)
+
+    const taskModalData = activeProjectTasks?.find(task => task.id === activeTaskId)
 
     return (
 

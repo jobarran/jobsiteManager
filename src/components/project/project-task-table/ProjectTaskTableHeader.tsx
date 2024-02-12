@@ -2,10 +2,10 @@
 
 import { IncidenceModalType, ModalType, Task } from '@/interfaces'
 import React, { useState } from 'react'
-import { useUIStore } from '@/store'
+import { useProjectStore } from '@/store'
 import { FaPercentage } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
-import { ProjectIncidenceModal, ProjectTaskIncidenceModal } from '@/components';
+import { ProjectIncidenceModal } from '@/components';
 
 
 
@@ -19,13 +19,13 @@ interface Props {
 
 export const ProjectTaskTableHeader = ({ searchValue, handleSearchChange, handleClearSearch, tasks, projectId }: Props) => {
 
-    const openTaskModal = useUIStore(state => state.openTaskModal)
-    const closeSubTaskModal = useUIStore(state => state.closeSubTaskModal)
-    const openIncidenceModal = useUIStore(state => state.openIncidenceModal)
+    const openTaskModal = useProjectStore(state => state.openTaskModal)
+    const closeSubTaskModal = useProjectStore(state => state.closeSubTaskModal)
+    const openIncidenceModal = useProjectStore(state => state.openIncidenceModal)
 
     const handleOpenModal = () => {
         closeSubTaskModal()
-        openTaskModal(null, ModalType.New)
+        openTaskModal(ModalType.New)
     };
 
     const handleOpenIncidenceModal = () => {

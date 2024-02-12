@@ -5,10 +5,10 @@ import { useState } from "react";
 import { AiFillDownCircle } from "react-icons/ai"
 import { BiMessageRounded } from "react-icons/bi";
 import { FaListUl } from "react-icons/fa";
-import { ModalType, Task } from "@/interfaces";
-import { useUIStore } from "@/store";
+import { ModalType } from "@/interfaces";
+import { useProjectStore } from "@/store";
 import { ProjectTaskModal } from "@/components";
-import { handlePriorityBgColor, handlePriorityTextColor, parseNumberFromString } from "@/utils";
+import { handlePriorityBgColor, handlePriorityTextColor } from "@/utils";
 
 
 interface Props {
@@ -21,8 +21,10 @@ interface Props {
 export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) => {
 
 
-    const openTaskModal = useUIStore(state => state.openTaskModal)
-    const closeSubTaskModal = useUIStore(state => state.closeSubTaskModal)
+    const openTaskModal = useProjectStore(state => state.openTaskModal)
+    const closeSubTaskModal = useProjectStore(state => state.closeSubTaskModal)
+    const setActiveTaskId = useProjectStore(state => state.setActiveTaskId)
+
 
     const [hideTable, setHideTable] = useState(false)
 
@@ -37,7 +39,8 @@ export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) =
 
     const handleOpenTaskModal = (task: any) => {
         closeSubTaskModal()
-        openTaskModal(task, ModalType.Edit)
+        setActiveTaskId(task.id)
+        openTaskModal(ModalType.Edit)
     }
 
     const handleStatusTextColor = () => {

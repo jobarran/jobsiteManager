@@ -1,10 +1,8 @@
-import { MdEdit, MdOutlineAdd } from 'react-icons/md';
-import { IoClose } from 'react-icons/io5';
+import { MdOutlineAdd } from 'react-icons/md';
 import { BiMessageRounded } from 'react-icons/bi';
 import { FaListUl, FaPercentage } from 'react-icons/fa';
-import { list } from 'postcss';
-import { IncidenceModalType, ModalType, SubTask } from '@/interfaces';
-import { useUIStore } from '@/store';
+import { IncidenceModalType, ModalType } from '@/interfaces';
+import { useProjectStore } from '@/store';
 
 interface Props {
     taskModalOption: 'list' | 'messages',
@@ -13,14 +11,14 @@ interface Props {
 
 export const ProjectTaskModalOptions = ({ setTaskModalOption, taskModalOption }: Props) => {
 
-    const openSubTaskModal = useUIStore(state => state.openSubTaskModal)
-    const closeSubTaskModal = useUIStore(state => state.closeSubTaskModal)
-    const openIncidenceModal = useUIStore(state => state.openIncidenceModal)
-    const closeIncidenceModal = useUIStore(state => state.closeIncidenceModal)
+    const openSubTaskModal = useProjectStore(state => state.openSubTaskModal)
+    const closeSubTaskModal = useProjectStore(state => state.closeSubTaskModal)
+    const openIncidenceModal = useProjectStore(state => state.openIncidenceModal)
+    const closeIncidenceModal = useProjectStore(state => state.closeIncidenceModal)
 
 
     const handleNewSubTask = () => {
-        openSubTaskModal(null, ModalType.New)
+        openSubTaskModal(ModalType.New)
     }
 
     const handleOpenIncidenceModal = () => {

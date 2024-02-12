@@ -1,8 +1,8 @@
 'use client'
 
 import { ProjectSubTaskModal, ProjectTaskModalAddNewTask, ProjectTaskModalDetail, ProjectTaskModalDistributionChart, ProjectTaskModalHeader, ProjectTaskModalOptions, ProjectTaskModalSubTaskData, StatusBadge } from "@/components";
-import { ModalType, Task } from "@/interfaces";
-import { useUIStore } from "@/store";
+import { ModalType } from "@/interfaces";
+import { useProjectStore } from "@/store";
 
 
 interface Props {
@@ -11,9 +11,9 @@ interface Props {
 
 export const ProjectTaskModal = ({ projectId }: Props) => {
 
-    const taskModalType = useUIStore(state => state.taskModalType)
-    const closeTaskModal = useUIStore(state => state.closeTaskModal)
-    const isTaskModalOpen = useUIStore(state => state.isTaskModalOpen)
+    const taskModalType = useProjectStore(state => state.taskModalType)
+    const closeTaskModal = useProjectStore(state => state.closeTaskModal)
+    const isTaskModalOpen = useProjectStore(state => state.isTaskModalOpen)
 
 
     const handleCloseModal = () => {

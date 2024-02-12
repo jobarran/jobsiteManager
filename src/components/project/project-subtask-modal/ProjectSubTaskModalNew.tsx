@@ -1,14 +1,12 @@
 'use client'
 
 import { ModalType, SubTaskPriority, SubTaskStatus, Task } from "@/interfaces";
-import { MdEdit } from 'react-icons/md';
-import { IoClose } from 'react-icons/io5';
 import { createSubTask, getTaskById } from "@/actions";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import clsx from "clsx";
 import Datepicker from "react-tailwindcss-datepicker";
-import { useUIStore } from "@/store";
+import { useProjectStore } from "@/store";
 
 
 
@@ -38,14 +36,16 @@ export const ProjectSubTaskModalNew = () => {
 
     const [errorMessage, setErrorMessage] = useState('')
     const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>()
-    const taskModalData = useUIStore(state => state.taskModalData)
-    const closeSubTaskModal = useUIStore(state => state.closeSubTaskModal)
-    const isSubTaskModalOpen = useUIStore(state => state.isSubTaskModalOpen)
-    const openTaskModal = useUIStore(state => state.openTaskModal)
 
+    // const taskModalData = useProjectStore(state => state.taskModalData)
+    const closeSubTaskModal = useProjectStore(state => state.closeSubTaskModal)
+    const isSubTaskModalOpen = useProjectStore(state => state.isSubTaskModalOpen)
+    const openTaskModal = useProjectStore(state => state.openTaskModal)
+    const setActiveTaskId = useProjectStore(state => state.setActiveTaskId)
+    const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
+    const activeTaskId = useProjectStore(state => state.activeTaskId)
 
-
-
+    const taskModalData = activeProjectTasks?.find(task => task.id === activeTaskId)
 
     const [value, setValue] = useState({
         startDate: '',
@@ -74,7 +74,7 @@ export const ProjectSubTaskModalNew = () => {
                 end: value.endDate,
                 priority: data.priority,
                 status: data.status,
-                taskId: taskModalData.id || '',
+                taskId: taskModalData?.id || '',
             })
 
             if (!resp.ok) {
@@ -82,13 +82,14 @@ export const ProjectSubTaskModalNew = () => {
                 return
             }
 
-            const { task } = await getTaskById(taskModalData.id!);
+            const { task } = await getTaskById(taskModalData?.id!);
 
             if (task === undefined) {
                 console.log('Task not found');
                 return;
             }
-            openTaskModal(task, ModalType.Edit)
+            setActiveTaskId(task.id)
+            openTaskModal(ModalType.Edit)
             closeSubTaskModal();
 
         } else {
