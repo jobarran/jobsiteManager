@@ -139,7 +139,7 @@ export const ProjectSubTaskModalNew = () => {
         >
 
             <div className="p-4 md:p-5  border-l dark:border-gray-600 h-full">
-                <div className="relative">
+                <div className="relative h-full max-h-full overflow-y-auto">
                     <div className="flex items-center justify-between py-4 border-b rounded-t dark:border-gray-600">
                         <h3 className="text-lg font-normal text-gray-900">
                             New <span className="font-extrabold">Subtask</span>
