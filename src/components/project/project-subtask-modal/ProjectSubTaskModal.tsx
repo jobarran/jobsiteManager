@@ -24,7 +24,7 @@ export const ProjectSubTaskModal = () => {
             className={modalClasses}
         >
 
-            <div className="p-4 md:p-5  border-l dark:border-gray-600 h-full">
+            <div className="p-4 md:p-5  border-l dark:border-gray-600 h-full overflow-y-auto">
 
 
                 {

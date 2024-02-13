@@ -34,7 +34,7 @@ export const ProjectTaskModal = ({ projectId }: Props) => {
             >
                 <ProjectSubTaskModal />
 
-                <div className="p-4 md:p-5 border-l dark:border-gray-600 h-full">
+                <div className="p-4 md:p-5 border-l dark:border-gray-600 h-full overflow-y-auto">
 
                     {
                         taskModalType === ModalType.New
