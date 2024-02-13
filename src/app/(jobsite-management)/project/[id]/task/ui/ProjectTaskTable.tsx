@@ -35,7 +35,7 @@ export const ProjectTaskTable = ({ tasks, projectId }: Props) => {
 
 
 
-    const head = ['Location', 'Name', 'Status', 'Progress', 'Incidence', 'Contractor', 'End', 'Priority']
+    const head = ['Name', 'Location', 'Status', 'Progress', 'Incidence', 'Contractor', 'End', 'Priority', 'Shortcuts']
 
     const data = filteredData ? filteredData.map((task) => ({
         id: task.id,

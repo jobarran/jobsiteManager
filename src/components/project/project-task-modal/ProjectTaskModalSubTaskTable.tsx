@@ -22,11 +22,11 @@ export const ProjectTaskModalSubTaskTable = () => {
     const sortedSubTask = taskModalData?.subTasks.slice().sort(sortByStatus);
 
     const head = ['Name', 'Progress', 'End', 'Priority']
-    const columnWidths = ['auto', '100px', '100px', '100px', '100px'];
+    const columnWidths = ['auto', '100px', '100px', '100px'];
 
-    const handleOpenSubTaskModal = (subTask:SubTask) => {
+    const handleOpenSubTaskModal = (subTask: SubTask) => {
         if (subTask.id)
-        setActiveSubTaskId(subTask.id)
+            setActiveSubTaskId(subTask.id)
         openSubTaskModal(ModalType.Edit)
     }
 
@@ -35,7 +35,7 @@ export const ProjectTaskModalSubTaskTable = () => {
 
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
 
-            <thead className="text-xs text-uppercase">
+            <thead className="text-xs text-uppercase hidden sm:table-header-group">
                 <tr>
                     {head.map((title: string, index: number) => (
                         <th
@@ -65,7 +65,10 @@ export const ProjectTaskModalSubTaskTable = () => {
                                     {item.name}
                                 </div>
                             </td>
-                            <td className="pl-2 pr-3 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
+                            <td
+                                className="pl-2 pr-3 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50"
+                                style={{ minWidth: '100px' }} 
+                            >
                                 <div className="w-full bg-neutral-100 flex items-center">
                                     <div
                                         className="bg-sky-300 pt-1 pb-0.5 text-center text-xs font-bold leading-none text-sky-700"
@@ -74,7 +77,7 @@ export const ProjectTaskModalSubTaskTable = () => {
                                     </div>
                                 </div>
                             </td>
-                            <td className="pl-2 py-2 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
+                            <td className="pl-2 py-2 hidden sm:table-cell font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
                                 {item.end}
                             </td>
                             <td className="pl-2 py-2 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">

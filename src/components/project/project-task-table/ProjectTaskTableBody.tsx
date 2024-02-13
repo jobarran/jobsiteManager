@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiFillDownCircle } from "react-icons/ai"
 import { BiMessageRounded } from "react-icons/bi";
 import { FaListUl } from "react-icons/fa";
@@ -21,13 +21,21 @@ interface Props {
 
 export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) => {
 
+    const [columnWidths, setColumnWidths] = useState<number[]>([]);
+    const tableRef = useRef<HTMLTableElement>(null);
 
     const openTaskModal = useProjectStore(state => state.openTaskModal)
     const closeSubTaskModal = useProjectStore(state => state.closeSubTaskModal)
     const setActiveTaskId = useProjectStore(state => state.setActiveTaskId)
-
-
     const [hideTable, setHideTable] = useState(false)
+
+    useEffect(() => {
+        if (tableRef.current) {
+            const newColumnWidths = Array(head.length).fill(100); // Set initial width as per your preference
+            setColumnWidths(newColumnWidths);
+        }
+    }, [head]);
+
 
     const filteredData = data.filter((item: any) => {
         const desiredStatus = status;
@@ -72,12 +80,12 @@ export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) =
 
     const handleTaskIncidence = (incidence: string) => {
         if (incidence === '0') {
-            return <div className="text-red-600"><GoAlert/></div>
+            return <div className="text-red-600"><GoAlert /></div>
         }
         return <span>{incidence} %</span>;
     };
 
-    const columnWidths = ['auto', '200px', '150px', '250px', '100px', '150px', '150px', '400px'];
+    // const columnWidths = ['auto', '100px', '100px', '250px', '150px', '100px', '100px', '150px'];
 
     return (
 
@@ -97,22 +105,24 @@ export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) =
                     <h6 className="text-lg">{`${status.toUpperCase()} Tasks`}</h6>
                 </button>
 
-                <div className="ml-8">
+                <div className="ml-2">
 
                     {
                         Array.from(filteredData).length === 0
                             ? <div hidden={hideTable} className="italic text-center bg-white p-2 w-full">{`No ${status} tasks found`}</div>
                             :
-                            <table hidden={hideTable} className="w-full text-sm text-left rtl:text-right text-gray-500">
-
-                                <thead className="text-xs text-uppercase">
+                            <table
+                                hidden={hideTable}
+                                className="w-full text-sm text-left rtl:text-right text-gray-500"
+                            >
+                                <thead className="text-xs text-uppercase hidden sm:table-header-group">
                                     <tr>
                                         {head.map((title: string, index: number) => (
                                             <th
                                                 key={index}
                                                 scope="col"
                                                 className={`pl-2 py-3`}
-                                                style={{ width: columnWidths[index] }}
+                                                style={{ minWidth: '100px', width: columnWidths[index] }}
                                             >
                                                 {title}
                                             </th>
@@ -131,17 +141,20 @@ export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) =
                                             <td className={`${handleStatusColor()} pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-l-4 border-b-4 border-gray-50`}>
                                                 <div className='flex items-center'>
                                                     <div className="lg:flex hidden pr-2 pl-1"></div>
-                                                    {item.location}
+                                                    {item.name}
                                                 </div>
                                             </td>
-                                            <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
-                                                {item.name}
+                                            <td className="pl-2 py-3 hidden sm:table-cell font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
+                                                {item.location}
                                             </td>
-                                            <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
+                                            <td className="pl-2 py-3 hidden sm:table-cell font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
                                                 {item.status}
                                             </td>
                                             <td className="pl-2 pr-3 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
-                                                <div className="w-full bg-neutral-100 flex items-center">
+                                                <div
+                                                    className="w-full bg-neutral-100 flex items-center"
+                                                    style={{ minWidth: '75px' }}
+                                                >
                                                     <div
                                                         className="bg-sky-300 pt-1 pb-0.5 text-center text-xs font-bold leading-none text-sky-700"
                                                         style={{ width: `${item.progress}%` }}
@@ -150,12 +163,12 @@ export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) =
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
+                                            <td className="pl-2 py-3 hidden sm:table-cell font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
                                                 {handleTaskIncidence(item.incidence)}                                            </td>
-                                            <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
+                                            <td className="pl-2 py-3 hidden sm:table-cell font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
                                                 {item.contractor}
                                             </td>
-                                            <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
+                                            <td className="pl-2 py-3 hidden sm:table-cell font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
                                                 {item.end}
                                             </td>
                                             <td className="pl-2 py-2 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
@@ -164,7 +177,7 @@ export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) =
                                                 </span>
 
                                             </td>
-                                            <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
+                                            <td className="pl-2 py-3 hidden sm:table-cell font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
                                                 <div className='flex items-center'>
 
                                                     <Link
