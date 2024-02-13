@@ -214,6 +214,7 @@ export const ProjectSubTaskModalNew = () => {
                 <label htmlFor="start-end" className="block mb-2 text-sm font-medium text-gray-900">Start and End date</label>
                 <div className="relative">
                     <Datepicker
+                        useRange={false}
                         inputClassName="bg-gray-50 border text-gray-900 sm:text-sm rounded-lg  w-full h-10 p-2.5"
                         placeholder={"Select Dates"}
                         value={value}
