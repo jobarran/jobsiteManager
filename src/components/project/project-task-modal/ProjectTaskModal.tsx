@@ -1,9 +1,6 @@
-'use client'
-
 import { ProjectSubTaskModal, ProjectTaskModalAddNewTask, ProjectTaskModalDetail, ProjectTaskModalDistributionChart, ProjectTaskModalHeader, ProjectTaskModalOptions, ProjectTaskModalSubTaskData, StatusBadge } from "@/components";
 import { ModalType } from "@/interfaces";
 import { useProjectStore } from "@/store";
-
 
 interface Props {
     projectId: string
@@ -15,54 +12,31 @@ export const ProjectTaskModal = ({ projectId }: Props) => {
     const closeTaskModal = useProjectStore(state => state.closeTaskModal)
     const isTaskModalOpen = useProjectStore(state => state.isTaskModalOpen)
 
-
     const handleCloseModal = () => {
         closeTaskModal()
     };
 
     const modalClasses = isTaskModalOpen
-        ? 'fixed top-0 right-0 bottom-0 flex flex-col w-full lg:w-1/3 h-screen transition-right-left duration-300 transform translate-x-0 bg-white z-30'
-        : 'fixed top-0 left-full bottom-0 flex flex-col w-full lg:w-1/3 h-screen transition-right-left duration-300 transform translate-x-full bg-white';
+        ? 'fixed top-0 right-0 bottom-0 left-0 flex flex-col w-full h-full p-4 md:p-5 overflow-y-auto bg-white z-30'
+        : 'hidden';
 
     return (
-        <>
-            <div
-                id="add-task-modal"
-                tabIndex={-1}
-                aria-hidden="true"
-                className={modalClasses}
-            >
-                <ProjectSubTaskModal />
-
-                <div className="p-4 md:p-5 border-l dark:border-gray-600 h-full overflow-y-auto">
-
-                    {
-                        taskModalType === ModalType.New
-                            ?
-                            <ProjectTaskModalAddNewTask
-                                isOpen={isTaskModalOpen}
-                                onClose={handleCloseModal}
-                                projectId={projectId}
-                            />
-                            :
-                            <ProjectTaskModalDetail />
-                    }
-
-
-
-                </div>
-
-
+        <div
+            id="add-task-modal"
+            aria-hidden={!isTaskModalOpen}
+            className={modalClasses}
+        >
+            <ProjectSubTaskModal />
+            <div className="border-l dark:border-gray-600">
+                {taskModalType === ModalType.New ?
+                    <ProjectTaskModalAddNewTask
+                        isOpen={isTaskModalOpen}
+                        onClose={handleCloseModal}
+                        projectId={projectId}
+                    /> :
+                    <ProjectTaskModalDetail />
+                }
             </div>
-
-
-
-
-
-        </>
-
-
+        </div>
     );
-
-
 };
