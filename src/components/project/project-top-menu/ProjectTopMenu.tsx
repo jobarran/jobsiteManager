@@ -10,10 +10,12 @@ import clsx from 'clsx';
 import { Project } from '@/interfaces';
 import { lastPath } from '@/utils';
 import { usePathname } from 'next/navigation'
+import { useProjectStore } from '@/store';
 
 
 export const ProjectTopMenu = (project: Project) => {
 
+    const setProject = useProjectStore(state => state.setProject)
     const pathname = usePathname()
 
     const [menuOpen, setMenuOpen] = useState(false);
@@ -24,6 +26,11 @@ export const ProjectTopMenu = (project: Project) => {
     const handleMenuToggle = (event: React.MouseEvent<HTMLButtonElement>) => {
         setMenuOpen(true);
     };
+
+    useEffect(() => {
+      setProject(project)
+    }, [])
+    
 
     useEffect(() => {
         const closeDropdown = (e: MouseEvent) => {

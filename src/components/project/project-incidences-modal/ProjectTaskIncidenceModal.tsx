@@ -4,35 +4,58 @@ import { updateTaskIncidence } from "@/actions/task/update-task-incidence";
 import { Task } from "@/interfaces";
 import { useProjectStore } from "@/store";
 import { useEffect, useState } from "react";
-import { IoClose } from 'react-icons/io5';
 import { FaSave } from "react-icons/fa";
 import { FaCheckCircle } from "react-icons/fa";
 import { IoAlertCircle } from "react-icons/io5";
+import { FaPercentage } from "react-icons/fa";
+import { FaX } from "react-icons/fa6";
 
-
-interface Props {
-    tasks: Task[],
-    projectId: string
-}
-
-export const ProjectTaskIncidenceModal = ({ tasks, projectId }: Props) => {
+export const ProjectTaskIncidenceModal = () => {
 
     const isIncidenceModalOpen = useProjectStore(state => state.isIncidenceModalOpen)
     const closeIncidenceModal = useProjectStore(state => state.closeIncidenceModal)
+    const setProjectTasks = useProjectStore(state => state.setProjectTasks)
+    const activeProject = useProjectStore(state => state.activeProject)
+    const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
 
-    const [updatedTasks, setUpdatedTasks] = useState<Task[]>(tasks);
+    const [updatedTasks, setUpdatedTasks] = useState<Task[]>([]);
+    const [originalTasks, setOriginalTasks] = useState<Task[]>([]);
     const [isIncidenceSumValid, setIsIncidenceSumValid] = useState<boolean>(true);
+
+    useEffect(() => {
+        if (activeProjectTasks)
+        setUpdatedTasks(activeProjectTasks)
+    }, [activeProjectTasks])
 
     useEffect(() => {
         setIsIncidenceSumValid(checkTaskIncidenceSum());
     }, [updatedTasks])
 
+    const handleDivideEquivalent = () => {
+        if (!Array.isArray(updatedTasks)) {
+            throw new Error('Parameter "tasks" must be an array.');
+        }
+        const numberOfTasks = updatedTasks.length;
+        if (numberOfTasks === 0) {
+            throw new Error('Array "tasks" must not be empty.');
+        }
 
+        const percentage = 100 / numberOfTasks;
+        const integerPart = Math.floor(percentage); 
+        const remainder = 100 % numberOfTasks; 
+
+        const updatedTasksWithEquivalent = updatedTasks.map((task, index) => ({
+            ...task,
+            incidence: (integerPart + (index < remainder ? 1 : 0)).toString() 
+        }));
+
+        setUpdatedTasks(updatedTasksWithEquivalent);
+    };
 
     const handleUpdateTaskIncidence = () => {
-        updateTaskIncidence(updatedTasks, projectId);
+        updateTaskIncidence(updatedTasks, activeProject?.id);
+        setProjectTasks(updatedTasks);
         closeIncidenceModal();
-        window.location.replace(`/project/${projectId}/task`)
     };
 
     const handleTaskInputChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,6 +85,11 @@ export const ProjectTaskIncidenceModal = ({ tasks, projectId }: Props) => {
     const incidenceSum = () => {
         return updatedTasks.reduce((acc, task) => acc + parseInt(task.incidence), 0);
     }
+
+    const handleCloseIncidenceModal = () => {
+        setUpdatedTasks(originalTasks);
+        closeIncidenceModal();
+    };
 
     const modalClasses = `fixed inset-0 flex justify-center items-center bg-opacity-50 z-50 transition-opacity duration-300 ${isIncidenceModalOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`;
     const modalContentClasses = `bg-white rounded-lg overflow-hidden h-full md:h-5/6 w-full md:max-w-md xl:max-w-lg transition-opacity duration-300 ${isIncidenceModalOpen ? 'opacity-100' : 'opacity-0'}`;
@@ -103,23 +131,32 @@ export const ProjectTaskIncidenceModal = ({ tasks, projectId }: Props) => {
                                 <div className="flex justify-end space-x-1">
                                     <button
                                         type="button"
-                                        className={`bg-transparent rounded-lg text-2xl w-8 h-8 inline-flex justify-center items-center ${isIncidenceSumValid ? 'text-sky-700' : 'text-gray-400'}`}
+                                        className="text-sky-700 bg-transparent rounded-lg text-lg w-6 h-6 inline-flex justify-center items-center"
+                                        onClick={handleDivideEquivalent}
+                                    >
+                                        <FaPercentage  />
+                                        <span className="sr-only">Equal</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={`bg-transparent rounded-lg text-lg w-6 h-6 inline-flex justify-center items-center ${isIncidenceSumValid ? 'text-sky-700' : 'text-gray-400'}`}
                                         data-modal-toggle="crud-modal"
                                         onClick={handleUpdateTaskIncidence}
                                         disabled={!isIncidenceSumValid}
                                     >
                                         <FaSave />
-                                        <span className="sr-only">Close modal</span>
+                                        <span className="sr-only">Save</span>
                                     </button>
                                     <button
                                         type="button"
-                                        className="text-red-700 bg-transparent rounded-lg text-2xl w-8 h-8 inline-flex justify-center items-center"
+                                        className="text-red-700 bg-transparent rounded-lg text-lg w-6 h-6 inline-flex justify-center items-center"
                                         data-modal-toggle="crud-modal"
-                                        onClick={closeIncidenceModal}
+                                        onClick={handleCloseIncidenceModal}
                                     >
-                                        <IoClose />
+                                        <FaX />
                                         <span className="sr-only">Close modal</span>
                                     </button>
+
                                 </div>
                             </div>
                         </div>

@@ -7,14 +7,13 @@ import { Avatar } from './Avatar';
 import { useSession } from 'next-auth/react';
 import { getCompanyByUserActiveCompany, logout } from '@/actions';
 import { NameAndSideToggle } from './NameAndSideToggle';
-import { useCompanyStore } from '@/store';
+import { useCompanyStore, useProjectStore } from '@/store';
 
 export const TopMenu = () => {
 
   const { data: session } = useSession();
   const activeCompany = useCompanyStore((state) => state.activeCompany)
   const setActiveCompany = useCompanyStore((state) => state.setCompany)
-
 
   useEffect(() => {
     const fetchCompany = async () => {

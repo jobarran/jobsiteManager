@@ -11,9 +11,9 @@ interface State {
     unSetProject: () => void;
 
     activeTaskId: string;
-    setActiveTaskId: (id:string) => void
+    setActiveTaskId: (id: string) => void
     activeSubTaskId: string;
-    setActiveSubTaskId: (id:string) => void
+    setActiveSubTaskId: (id: string) => void
 
     isTaskModalOpen: boolean;
     taskModalType: ModalType | undefined
@@ -43,17 +43,17 @@ enum IncidenceModalType {
 }
 
 export const useProjectStore = create<State>()((set) => ({
-    
+
     activeProject: null,
     activeProjectTasks: null,
     setProject: (project) => set({ activeProject: project }),
-    setProjectTasks: (tasks) => set({ activeProjectTasks: tasks}),
-    unSetProject: () => set({ activeProject: null, activeProjectTasks: null}),
+    setProjectTasks: (tasks) => set({ activeProjectTasks: tasks }),
+    unSetProject: () => set({ activeProject: null, activeProjectTasks: null, activeTaskId: '', activeSubTaskId: '', }),
 
     activeTaskId: '',
     activeSubTaskId: '',
-    setActiveTaskId: (id) => set({activeTaskId: id}),
-    setActiveSubTaskId: (id) => set({activeSubTaskId: id}),
+    setActiveTaskId: (id) => set({ activeTaskId: id }),
+    setActiveSubTaskId: (id) => set({ activeSubTaskId: id }),
 
     isTaskModalOpen: false,
     taskModalType: undefined,
@@ -69,6 +69,6 @@ export const useProjectStore = create<State>()((set) => ({
     isIncidenceModalOpen: false,
     incidenceModalType: undefined,
     openIncidenceModal: (incidenceModalType) => set({ isIncidenceModalOpen: true, incidenceModalType: incidenceModalType }),
-    closeIncidenceModal: () => set({ isIncidenceModalOpen: false, incidenceModalType: undefined})
-  
+    closeIncidenceModal: () => set({ isIncidenceModalOpen: false, incidenceModalType: undefined })
+
 }))

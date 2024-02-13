@@ -3,14 +3,21 @@
 import { ProjectTableBody, ProjectTableHeader } from '@/components'
 import useQuickSearch from '@/hooks/useQuickSearch'
 import { Project } from '@/interfaces'
-import React, { useState } from 'react'
+import { useProjectStore } from '@/store'
+import React, { useEffect, useState } from 'react'
 
 export const ProjectTable = (projects: any) => {
+
+    const unSetProject = useProjectStore(state => state.unSetProject)
+
+    useEffect(() => {
+        unSetProject()
+    }, [])
 
     const [filteredData, setSearch, clearSearch, setNewData] = useQuickSearch(projects.projects);
     const [searchValue, setSearchValue] = useState('');
 
-    const head = ['Name', 'End', 'Workers', 'Progress', 'Leader', 'Actions']
+    const head = ['Name', 'End', 'Workers', 'Progress', 'Leader', 'Shortcuts']
 
     const data = filteredData ? filteredData.map((project) => ({
         name: project.name,

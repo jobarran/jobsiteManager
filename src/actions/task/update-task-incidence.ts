@@ -5,7 +5,7 @@ import { ProjectStatus, Task } from "@/interfaces";
 import prisma from "@/lib/prisma";
 
 
-export const updateTaskIncidence = async ( tasks:Task[], projectId:string) => {
+export const updateTaskIncidence = async (tasks: Task[], projectId: string | undefined) => {
 
     const session = await auth();
     const userId = session?.user.id

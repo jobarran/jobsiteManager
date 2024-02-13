@@ -1,9 +1,13 @@
 'use client'
 
+import { useProjectStore } from "@/store";
 import { truncateString } from "@/utils";
 import Link from "next/link";
 import { useState } from "react";
 import { AiFillDownCircle } from "react-icons/ai"
+import { FaList } from "react-icons/fa6";
+import { FaChartLine } from "react-icons/fa6";
+import { FaUserGroup } from "react-icons/fa6";
 
 
 interface Props {
@@ -14,6 +18,7 @@ interface Props {
 
 export const ProjectTableBody = ({ data, head, status }: Props) => {
 
+    const setProject = useProjectStore(state => state.setProject)
     const [hideTable, setHideTable] = useState(false)
 
     const filteredData = data.filter((item: any) => {
@@ -51,17 +56,26 @@ export const ProjectTableBody = ({ data, head, status }: Props) => {
         }
     }
 
-    // const handleClickRow = (item: any) => {
-    //     setProject({
-    //         id: item.id,
-    //         name: item.code,
-    //         description: item.desciption,
-    //         status: item.status,
-    //     })
-    //     window.location.replace('/project/' + item.id)
-    // }
+    const handleClickRow = (item: any) => {
+        setProject({
+            id: item.id,
+            name: item.code,
+            description: item.desciption,
+            status: item.status,
+        })
+        window.location.replace('/project/' + item.id)
+    }
 
-    const columnWidths = ['auto', '200px', '150px', '250px', '150px', '400px'];
+    const handleClickShortcut = (item: any) => {
+        setProject({
+            id: item.id,
+            name: item.code,
+            description: item.desciption,
+            status: item.status,
+        })
+    }
+
+    const columnWidths = ['auto', '200px', '150px', '250px', '150px', '100px'];
 
 
     return (
@@ -104,84 +118,73 @@ export const ProjectTableBody = ({ data, head, status }: Props) => {
                                     <tr
                                         key={index}
                                         className="bg-white hover:bg-gray-50"
-                                        // onClick={() => handleClickRow(item)}
-                                        // style={{ cursor: 'pointer' }}
+                                        onClick={(e) => {
+                                            // Check if the click target is a link or not
+                                            const target = e.target as HTMLElement;
+                                            if (target.nodeName !== 'A' && !target.closest('a')) {
+                                                handleClickRow(item);
+                                            }
+                                        }}
+                                        style={{ cursor: 'pointer' }}
                                     >
-                                        <td className={`${handleStatusColor()} pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-l-4 border-b-4 border-gray-50`}>
-                                            <span className="hidden xl:inline">{truncateString(item.name, 30)}</span> {/* Show full text for large screens and above */}
-                                            <span className="hidden xl:hidden lg:inline">{truncateString(item.name, 15)}</span> {/* Show truncated text for medium screens */}
-                                            <span className="lg:hidden">{truncateString(item.name, 8)}</span> {/* Show further truncated text for small screens */}
-                                        </td>
-                                        <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
-                                            <span className="hidden sm:inline">{item.end}</span>
-                                            <span className="sm:hidden">{truncateString(item.end, 4)}</span>
-                                        </td>
-                                        <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
-                                            {item.workers}
-                                        </td>
-                                        <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
-                                            <div className="w-full bg-neutral-100 flex items-center">
-                                                <div
-                                                    className="bg-sky-300 pt-1 pb-0.5 text-center text-xs font-bold leading-none text-sky-700"
-                                                    style={{ width: item.progress }}
-                                                >
-                                                    {item.progress}
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
-                                            {item.leader}
-                                        </td>
-                                        <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
-                                            <div className='flex items-center'>
-                                                <Link
-                                                    href="/project/[id]" as={`/project/${item.id}`}
-                                                    className="sm:flex hidden items-center pr-2 text-gray-400 rounded-lg"
-                                                    passHref
-                                                >
-                                                    <span className='transition-all duration-200 hover:text-sky-700'>Dashboard</span>
-                                                </Link>
-                                                <span className="sm:flex hidden pr-2 text-gray-400" >|</span>
-                                                <Link
-                                                    href="/project/[id]/task" as={`/project/${item.id}/task`}
-                                                    className="flex items-center pr-2 text-gray-400 rounded-lg"
-                                                    passHref
-                                                >
-                                                    <span className='transition-all duration-200 hover:text-sky-700'>Tasks</span>
-                                                </Link>
-                                                <span className="md:flex hidden pr-2 text-gray-400" >|</span>
-                                                <Link
-                                                    href="/project/[id]/personal" as={`/project/${item.id}/personal`}
-                                                    className="md:flex hidden items-center pr-2 text-gray-400 rounded-lg"
-                                                    passHref
-                                                >
-                                                    <span className='transition-all duration-200 hover:text-sky-700'>Personal</span>
-                                                </Link>
-                                                <span className="lg:flex hidden pr-2 text-gray-400" >|</span>
-                                                <Link
-                                                    href="/project/[id]/doc" as={`/project/${item.id}/doc`}
-                                                    className="lg:flex hidden items-center pr-2 text-gray-400 rounded-lg"
-                                                    passHref
-                                                >
-                                                    <span className='transition-all duration-200 hover:text-sky-700'>Docs</span>
-                                                </Link>
-                                                <span className="xl:flex hidden pr-2 text-gray-400" >|</span>
-                                                <Link
-                                                    href="/project/[id]/report" as={`/project/${item.id}/report`}
-                                                    className="xl:flex hidden items-center pr-2 text-gray-400 rounded-lg"
-                                                    passHref
-                                                >
-                                                    <span className='transition-all duration-200 hover:text-sky-700'>Report</span>
-                                                </Link>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                <td className={`${handleStatusColor()} pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-l-4 border-b-4 border-gray-50`}>
+                                    <span className="hidden xl:inline">{truncateString(item.name, 30)}</span> {/* Show full text for large screens and above */}
+                                    <span className="hidden xl:hidden lg:inline">{truncateString(item.name, 15)}</span> {/* Show truncated text for medium screens */}
+                                    <span className="lg:hidden">{truncateString(item.name, 8)}</span> {/* Show further truncated text for small screens */}
+                                </td>
+                                <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
+                                    <span className="hidden sm:inline">{item.end}</span>
+                                    <span className="sm:hidden">{truncateString(item.end, 4)}</span>
+                                </td>
+                                <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
+                                    {item.workers}
+                                </td>
+                                <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
+                                    <div className="w-full bg-neutral-100 flex items-center">
+                                        <div
+                                            className="bg-sky-300 pt-1 pb-0.5 text-center text-xs font-bold leading-none text-sky-700"
+                                            style={{ width: item.progress }}
+                                        >
+                                            {item.progress}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
+                                    {item.leader}
+                                </td>
+                                <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
+                                    <div className='flex items-center'>
+                                        <Link
+                                            href="/project/[id]" as={`/project/${item.id}`}
+                                            className="sm:flex hidden items-center pr-2 text-gray-400 rounded-lg"
+                                            passHref
+                                        >
+                                            <FaChartLine />
+                                        </Link>
+                                        <Link
+                                            href="/project/[id]/task" as={`/project/${item.id}/task`}
+                                            className="flex items-center pr-2 text-gray-400 rounded-lg"
+                                            onClick={() => handleClickShortcut(item)}
+                                            passHref
+                                        >
+                                            <FaList />
+                                        </Link>
+                                        <Link
+                                            href="/project/[id]/personal" as={`/project/${item.id}/personal`}
+                                            className="md:flex hidden items-center pr-2 text-gray-400 rounded-lg"
+                                            passHref
+                                        >
+                                            <FaUserGroup />
+                                        </Link>
+                                    </div>
+                                </td>
+                            </tr>
                                 ))}
-                            </tbody>
+                        </tbody>
 
                         </table>
                 }
-            </div>
         </div>
+        </div >
     )
 }
