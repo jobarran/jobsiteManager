@@ -68,14 +68,13 @@ export const ProjectTaskModalAddNewTask = ({ projectId }: Props) => {
             return
         }
         // onClose()
+        // todo
         window.location.replace(`/project/${projectId}/task`)
     }
 
-
     return (
 
-
-        <div className="relative h-full max-h-full overflow-y-auto">
+        <div className="relative p-2 h-full max-h-full overflow-y-auto">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
                 <div className="flex items-center justify-between py-4 border-b rounded-t dark:border-gray-600">
                     <h3 className="text-lg font-normal text-gray-900">
@@ -101,11 +100,9 @@ export const ProjectTaskModalAddNewTask = ({ projectId }: Props) => {
                             </button>
                         </div>
                     </div>
-
                 </div>
 
                 <div className="grid gap-4 mb-4 grid-cols-2 "></div>
-
 
                 <div>
                     <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900">Task Name</label>
