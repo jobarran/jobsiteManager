@@ -23,7 +23,7 @@ export const ProjectIncidenceModal = ({ tasks, projectId }: Props) => {
             {
                 incidenceModalType === 'task'
 
-                    ? <ProjectTaskIncidenceModal tasks={tasks} projectId={projectId} />
+                    ? <ProjectTaskIncidenceModal />
                     :
                     taskModalData
                         ? <ProjectSubTaskIncidenceModal />
