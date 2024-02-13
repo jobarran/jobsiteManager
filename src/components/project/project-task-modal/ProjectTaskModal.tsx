@@ -3,7 +3,6 @@
 import { ProjectSubTaskModal, ProjectTaskModalAddNewTask, ProjectTaskModalDetail, ProjectTaskModalDistributionChart, ProjectTaskModalHeader, ProjectTaskModalOptions, ProjectTaskModalSubTaskData, StatusBadge } from "@/components";
 import { ModalType } from "@/interfaces";
 import { useProjectStore } from "@/store";
-import { useState } from "react";
 
 
 interface Props {
@@ -16,29 +15,9 @@ export const ProjectTaskModal = ({ projectId }: Props) => {
     const closeTaskModal = useProjectStore(state => state.closeTaskModal)
     const isTaskModalOpen = useProjectStore(state => state.isTaskModalOpen)
 
-    // Track touch movement
-    const [touchStartX, setTouchStartX] = useState<number>(0);
-    const [touchEndX, setTouchEndX] = useState<number>(0);
 
     const handleCloseModal = () => {
         closeTaskModal()
-    };
-
-    const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-        setTouchStartX(e.touches[0].clientX);
-    };
-
-    const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-        setTouchEndX(e.touches[0].clientX);
-    };
-
-    const handleTouchEnd = () => {
-        if (touchEndX - touchStartX > 50) {
-            // Move modal right to close
-            handleCloseModal();
-        }
-        setTouchStartX(0);
-        setTouchEndX(0);
     };
 
     const modalClasses = isTaskModalOpen
@@ -52,9 +31,6 @@ export const ProjectTaskModal = ({ projectId }: Props) => {
                 tabIndex={-1}
                 aria-hidden="true"
                 className={modalClasses}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
             >
                 <ProjectSubTaskModal />
 
