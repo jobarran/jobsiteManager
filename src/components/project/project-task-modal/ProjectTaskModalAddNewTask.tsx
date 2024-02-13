@@ -10,8 +10,6 @@ import Datepicker from "react-tailwindcss-datepicker";
 
 
 interface Props {
-    isOpen: boolean
-    onClose: () => void
     projectId: string
 }
 
@@ -75,7 +73,7 @@ export const ProjectTaskModalAddNewTask = ({ projectId }: Props) => {
     return (
 
 
-        <div className="relative h-full max-h-full overflow-y-auto">
+        <div className="relative h-screen max-h-full overflow-y-auto">
             <div className="flex items-center justify-between py-4 border-b rounded-t dark:border-gray-600">
                 <h3 className="text-lg font-normal text-gray-900">
                     New <span className="font-extrabold">Task</span>
@@ -117,7 +115,7 @@ export const ProjectTaskModalAddNewTask = ({ projectId }: Props) => {
                         placeholder="Task 01"
                         className={
                             clsx(
-                                "bg-gray-50 border text-gray-900 sm:text-sm rounded-lg block w-full h-10 p-2.5",
+                                "bg-gray-50 border text-gray-900 sm:text-sm rounded-lg block w-screen h-10 p-2.5",
                                 {
                                     'focus:outline-none focus:border-2 border-pink-500 text-pink-600 focus:border-pink-500 focus:ring-pink-500': !!errors.name
                                 }
@@ -138,7 +136,7 @@ export const ProjectTaskModalAddNewTask = ({ projectId }: Props) => {
                         placeholder="Kitchen, bedroom ..."
                         className={
                             clsx(
-                                "bg-gray-50 border text-gray-900 sm:text-sm rounded-lg block w-full h-10 p-2.5",
+                                "bg-gray-50 border text-gray-900 sm:text-sm rounded-lg block w-screen h-10 p-2.5",
                                 {
                                     'focus:outline-none focus:border-2 border-pink-500 text-pink-600 focus:border-pink-500 focus:ring-pink-500': !!errors.name
                                 }
@@ -159,7 +157,7 @@ export const ProjectTaskModalAddNewTask = ({ projectId }: Props) => {
                         placeholder="Contractor name"
                         className={
                             clsx(
-                                "bg-gray-50 border text-gray-900 sm:text-sm rounded-lg block w-full h-10 p-2.5",
+                                "bg-gray-50 border text-gray-900 sm:text-sm rounded-lg block w-screen h-10 p-2.5",
                                 {
                                     'focus:outline-none focus:border-2 border-pink-500 text-pink-600 focus:border-pink-500 focus:ring-pink-500': !!errors.name
                                 }
@@ -177,7 +175,7 @@ export const ProjectTaskModalAddNewTask = ({ projectId }: Props) => {
                     <label htmlFor="start-end" className="block mb-2 text-sm font-medium text-gray-900">Start and End date</label>
                     <div className="relative">
                         <Datepicker
-                            inputClassName="bg-gray-50 border text-gray-900 sm:text-sm rounded-lg  w-full h-10 p-2.5"
+                            inputClassName="bg-gray-50 border text-gray-900 sm:text-sm rounded-lg  w-screen h-10 p-2.5"
                             placeholder={"Select Dates"}
                             value={value}
                             onChange={handleValueChange}
@@ -192,7 +190,7 @@ export const ProjectTaskModalAddNewTask = ({ projectId }: Props) => {
                         id="priority"
                         className={
                             clsx(
-                                "bg-gray-50 border text-gray-900 sm:text-sm rounded-lg block w-full h-10 p-2.5",
+                                "bg-gray-50 border text-gray-900 sm:text-sm rounded-lg block w-screen h-10 p-2.5",
                                 {
                                     'focus:outline-none focus:border-2 border-pink-500 text-pink-600 focus:border-pink-500 focus:ring-pink-500': !!errors.name
                                 }
@@ -215,7 +213,7 @@ export const ProjectTaskModalAddNewTask = ({ projectId }: Props) => {
                         id="status"
                         className={
                             clsx(
-                                "bg-gray-50 border text-gray-900 sm:text-sm rounded-lg block w-full h-10 p-2.5",
+                                "bg-gray-50 border text-gray-900 sm:text-sm rounded-lg block w-screen h-10 p-2.5",
                                 {
                                     'focus:outline-none focus:border-2 border-pink-500 text-pink-600 focus:border-pink-500 focus:ring-pink-500': !!errors.name
                                 }
@@ -239,7 +237,7 @@ export const ProjectTaskModalAddNewTask = ({ projectId }: Props) => {
                         rows={3}
                         id="description"
                         placeholder="Description..."
-                        className="bg-gray-50 border text-gray-900 sm:text-sm rounded-lg block p-2.5 w-full text-sm "
+                        className="bg-gray-50 border text-gray-900 sm:text-sm rounded-lg block p-2.5 w-screen text-sm "
                         {...register('description')}
                     ></textarea>
                 </div>
@@ -247,7 +245,7 @@ export const ProjectTaskModalAddNewTask = ({ projectId }: Props) => {
 
                 <button
                     type="submit"
-                    className="btn-login"
+                    className="btn-login mb-4"
                 >
                     Add
                 </button>
