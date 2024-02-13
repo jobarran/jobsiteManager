@@ -29,7 +29,7 @@ export const ProjectTaskModal = () => {
             {
                 taskModalType === ModalType.New
                     ?
-                    <ProjectTaskModalAddNewTask projectId={activeProject ? activeProject.id : ''} />
+                    <ProjectTaskModalAddNewTask />
                     :
                     <ProjectTaskModalDetail />
             }

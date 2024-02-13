@@ -10,11 +10,6 @@ import Datepicker from "react-tailwindcss-datepicker";
 import { FaSave } from 'react-icons/fa';
 import { FaX } from 'react-icons/fa6';
 
-
-interface Props {
-    projectId: string
-}
-
 type FormInputs = {
     name: string;
     location: string;
@@ -27,9 +22,10 @@ type FormInputs = {
     description: string
 }
 
-export const ProjectTaskModalAddNewTask = ({ projectId }: Props) => {
+export const ProjectTaskModalAddNewTask = () => {
 
     const closeTaskModal = useProjectStore(state => state.closeTaskModal)
+    const activeProject = useProjectStore(state => state.activeProject)
 
     const [errorMessage, setErrorMessage] = useState('')
     const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>()
@@ -60,7 +56,7 @@ export const ProjectTaskModalAddNewTask = ({ projectId }: Props) => {
             priority: data.priority,
             status: data.status,
             subTasks: [],
-            projectId: projectId,
+            projectId: activeProject ? activeProject.id : '',
         })
 
         if (!resp.ok) {
@@ -69,7 +65,7 @@ export const ProjectTaskModalAddNewTask = ({ projectId }: Props) => {
         }
         // onClose()
         // todo
-        window.location.replace(`/project/${projectId}/task`)
+        window.location.replace(`/project/${activeProject?.id}/task`)
     }
 
     return (

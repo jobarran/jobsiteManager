@@ -90,7 +90,7 @@ export const ProjectTaskTableHeader = ({ searchValue, handleSearchChange, handle
                         onClick={handleOpenIncidenceModal}
                     >
                         <FaPercentage />
-                        <p className='ml-2'>Incidences</p>
+                        <p className='ml-2 hidden md:block'>Incidences</p>
                     </button>
 
                     <button
@@ -99,7 +99,7 @@ export const ProjectTaskTableHeader = ({ searchValue, handleSearchChange, handle
                         onClick={handleOpenModal}
                     >
                         <FaPlus />
-                        <p className='ml-2'>Add task</p>
+                        <p className='ml-2 hidden md:block'>Add task</p>
                     </button>
 
                 </div>

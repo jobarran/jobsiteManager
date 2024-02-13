@@ -4,6 +4,7 @@ import { IoClose } from 'react-icons/io5';
 import { PriorityBadge } from "@/components";
 import { useProjectStore } from "@/store";
 import { GoAlert } from 'react-icons/go';
+import { FaX } from 'react-icons/fa6';
 
 interface Props {
     handleIsEditable: () => void
@@ -54,25 +55,28 @@ export const ProjectSubTaskModalHeader = ({ handleIsEditable }: Props) => {
                         <div className="h-3 w-32 my-1 bg-slate-200 rounded"></div>
                     </div>
             }
+
             <div className="flex">
-                <button
-                    type="button"
-                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-2xl w-8 h-8 inline-flex justify-center items-center mr-2 dark:hover:bg-gray-600 dark:hover:text-white"
-                    data-modal-toggle="crud-modal"
-                    onClick={handleIsEditable}
-                >
-                    <MdEdit />
-                    <span className="sr-only">Edit modal</span>
-                </button>
-                <button
-                    type="button"
-                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-2xl w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                    data-modal-toggle="crud-modal"
-                    onClick={closeSubTaskModal}
-                >
-                    <IoClose />
-                    <span className="sr-only">Close modal</span>
-                </button>
+                <div className="flex justify-end space-x-1">
+                    <button
+                        type="submit"
+                        className={`bg-transparent rounded-lg text-lg w-6 h-6 inline-flex justify-center items-center text-sky-700`}
+                        onClick={handleIsEditable}
+                    >
+                        <MdEdit />
+                        <span className="sr-only">Save</span>
+                    </button>
+                    <button
+                        type="button"
+                        className="text-red-700 bg-transparent rounded-lg text-lg w-6 h-6 inline-flex justify-center items-center"
+                        data-modal-toggle="crud-modal"
+                        onClick={closeSubTaskModal}
+                    >
+                        <FaX />
+                        <span className="sr-only">Close modal</span>
+                    </button>
+                </div>
+                
             </div>
         </>
     )
