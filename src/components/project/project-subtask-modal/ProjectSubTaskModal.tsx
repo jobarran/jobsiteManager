@@ -13,8 +13,8 @@ export const ProjectSubTaskModal = () => {
 
 
     const modalClasses = isSubTaskModalOpen
-        ? 'fixed top-0 right-0 bottom-0 flex flex-col w-full h-screen transition-right-left duration-300 transform translate-x-0 bg-white z-50'
-        : 'fixed top-0 left-full bottom-0 flex flex-col w-full h-screen transition-right-left duration-300 transform translate-x-full bg-white';
+        ? 'absolute top-0 right-0 bottom-0 flex flex-col p-6 md:p-5 border-l dark:border-gray-600 w-full h-screen transition-right-left duration-300 transform translate-x-0 bg-white z-50 overflow-y-auto'
+        : 'absolute top-0 left-full bottom-0 flex flex-col p-4 md:p-5 border-l dark:border-gray-600 w-full h-screen transition-right-left duration-300 transform translate-x-full bg-white overflow-y-auto';
 
     return (
         <div
@@ -24,7 +24,8 @@ export const ProjectSubTaskModal = () => {
             className={modalClasses}
         >
 
-            <div className="p-4 md:p-5  border-l dark:border-gray-600 h-full">
+            {/* <div className="p-4 md:p-5  border-l dark:border-gray-600 h-full overflow-y-auto"> */}
+            {/* <div className="p-6 md:p-5 border-l dark:border-gray-600 h-full max-h-full overflow-y-auto"> */}
 
 
                 {
@@ -37,7 +38,7 @@ export const ProjectSubTaskModal = () => {
 
 
 
-            </div>
+            {/* </div> */}
 
 
         </div>
