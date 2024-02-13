@@ -13,8 +13,8 @@ export const ProjectSubTaskModal = () => {
 
 
     const modalClasses = isSubTaskModalOpen
-        ? 'absolute top-0 right-0 flex flex-col p-6 md:p-5 border-l dark:border-gray-600 w-full h-full transition-right-left duration-300 transform translate-x-0 bg-white z-50 overflow-y-auto'
-        : 'absolute top-0 left-full flex flex-col p-4 md:p-5 border-l dark:border-gray-600 w-full h-full transition-right-left duration-300 transform translate-x-full bg-white overflow-y-auto';
+        ? 'fixed top-0 right-0 flex flex-col p-6 md:p-5 border-l border-gray-200 w-full h-full transition-right-left duration-300 transform translate-x-0 bg-white z-50 overflow-y-auto'
+        : 'fixed top-0 left-full flex flex-col p-4 md:p-5 border-l border-gray-200 w-full h-full transition-right-left duration-300 transform translate-x-full bg-white overflow-y-auto';
 
     return (
         <div
@@ -24,22 +24,13 @@ export const ProjectSubTaskModal = () => {
             className={modalClasses}
         >
 
-            {/* <div className="p-4 md:p-5  border-l dark:border-gray-600 h-full overflow-y-auto"> */}
-            {/* <div className="p-6 md:p-5 border-l dark:border-gray-600 h-full max-h-full overflow-y-auto"> */}
-
-
-                {
-                    subTaskModalType === ModalType.New
-                        ?
-                        <ProjectSubTaskModalNew />
-                        :
-                        <ProjectSubTaskModalDetail />
-                }
-
-
-
-            {/* </div> */}
-
+            {
+                subTaskModalType === ModalType.New
+                    ?
+                    <ProjectSubTaskModalNew />
+                    :
+                    <ProjectSubTaskModalDetail />
+            }
 
         </div>
 

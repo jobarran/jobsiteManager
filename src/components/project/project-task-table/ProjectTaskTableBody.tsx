@@ -93,9 +93,7 @@ export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) =
 
             <div className="pt-4 pb-4">
 
-                <ProjectTaskModal
-                    projectId={projectId}
-                />
+                <ProjectTaskModal />
 
                 <button
                     className={`${handleStatusTextColor()} font-bold rounded inline-flex items-center mt-2`}
