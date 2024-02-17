@@ -157,7 +157,7 @@ export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) =
                                                         className="bg-sky-300 pt-1 pb-0.5 text-center text-xs font-bold leading-none text-sky-700"
                                                         style={{ width: `${item.progress}%` }}
                                                     >
-                                                        {item.progress}%
+                                                        {item.progress.toFixed(0)}%
                                                     </div>
                                                 </div>
                                             </td>

@@ -22,8 +22,11 @@ interface State {
 
     isSubTaskModalOpen: boolean;
     subTaskModalType: ModalType | undefined
+    isSubTaskModalEdited: boolean;
     openSubTaskModal: (subTaskModalType: ModalType | undefined) => void;
     closeSubTaskModal: () => void;
+    setSubTaskModalEditableTrue: () => void;
+    setSubTaskModalEditableFalse: () => void;
 
     isIncidenceModalOpen: boolean;
     incidenceModalType: IncidenceModalType | undefined
@@ -63,8 +66,11 @@ export const useProjectStore = create<State>()((set) => ({
     isSubTaskModalOpen: false,
     subTaskModalData: null,
     subTaskModalType: undefined,
-    openSubTaskModal: (subTaskModalType) => set({ isSubTaskModalOpen: true, subTaskModalType: subTaskModalType }),
-    closeSubTaskModal: () => set({ isSubTaskModalOpen: false, subTaskModalType: undefined, activeSubTaskId: '' }),
+    isSubTaskModalEdited: false,
+    openSubTaskModal: (subTaskModalType) => set({ isSubTaskModalOpen: true, subTaskModalType: subTaskModalType, isSubTaskModalEdited: false }),
+    closeSubTaskModal: () => set({ isSubTaskModalOpen: false, subTaskModalType: undefined, activeSubTaskId: '', isSubTaskModalEdited:false }),
+    setSubTaskModalEditableTrue: () => set({ isSubTaskModalEdited: true }),
+    setSubTaskModalEditableFalse: () => set({ isSubTaskModalEdited: false }),
 
     isIncidenceModalOpen: false,
     incidenceModalType: undefined,

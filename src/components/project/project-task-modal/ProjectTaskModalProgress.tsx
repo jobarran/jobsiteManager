@@ -11,7 +11,7 @@ const ProjectTaskModalProgress = () => {
     const activeTaskId = useProjectStore(state => state.activeTaskId)
 
     const taskModalData = activeProjectTasks?.find(task => task.id === activeTaskId)
-    
+
     const progressBySubTaskIncidence = getProgressBySubTaskIncidence(taskModalData?.subTasks)
     const [progress, setProgress] = useState(0);
 
@@ -39,7 +39,7 @@ const ProjectTaskModalProgress = () => {
                 </g>
             </svg>
             <div className="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                <span className="text-center text-2xl font-semibold text-gray-700">{progress}%</span>
+                <span className="text-center text-2xl font-semibold text-gray-700">{progress.toFixed(0)}%</span>
             </div>
         </div>
     );

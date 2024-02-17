@@ -31,7 +31,7 @@ export * from './project/project-subtask-modal/ProjectSubTaskModal'
 export * from './project/project-subtask-modal/ProjectSubTaskModalDetail'
 export * from './project/project-subtask-modal/ProjectSubTaskModalNew'
 export * from './project/project-subtask-modal/ProjectSubTaskModalHeader'
-export * from './project/project-subtask-modal/rangeValue'
+export * from './project/project-subtask-modal/ProjectSubTaskRangeValue'
 
 export * from './ui/breadcrymb/Breadcrumb'
 

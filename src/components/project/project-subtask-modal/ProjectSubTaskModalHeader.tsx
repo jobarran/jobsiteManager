@@ -11,19 +11,17 @@ import { FaSave } from 'react-icons/fa';
 import { useEffect } from 'react';
 
 interface Props {
-    handleIsEditable: () => void,
-    progressChange: boolean
-    setProgressChange: (arg0: boolean) => void
+    handleSaveSubTaskModal: () => void
 }
 
-export const ProjectSubTaskModalHeader = ({ handleIsEditable, progressChange, setProgressChange }: Props) => {
+export const ProjectSubTaskModalHeader = ({ handleSaveSubTaskModal }: Props) => {
 
     const closeSubTaskModal = useProjectStore(state => state.closeSubTaskModal)
     const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
     const activeTaskId = useProjectStore(state => state.activeTaskId)
-    const activeSubTaskId = useProjectStore(state => state.activeSubTaskId)  
-
-
+    const activeSubTaskId = useProjectStore(state => state.activeSubTaskId)
+    const isSubTaskModalEdited = useProjectStore(state => state.isSubTaskModalEdited)
+    
     const subTaskModalData = activeProjectTasks?.find(task => task.id === activeTaskId)?.subTasks
         .find(subtask => subtask.id === activeSubTaskId);
 
@@ -66,19 +64,11 @@ export const ProjectSubTaskModalHeader = ({ handleIsEditable, progressChange, se
             <div className="flex">
                 <div className="flex justify-end space-x-1">
                     <button
-                        type="submit"
-                        className={`bg-transparent rounded-lg text-lg w-6 h-6 inline-flex justify-center items-center text-sky-700`}
-                        onClick={handleIsEditable}
-                    >
-                        <MdEdit />
-                        <span className="sr-only">Save</span>
-                    </button>
-                    <button
                         type="button"
-                        className={`bg-transparent rounded-lg text-lg w-6 h-6 inline-flex justify-center items-center ${!progressChange ? 'text-sky-700' : 'text-gray-400'}`}
+                        className={`bg-transparent rounded-lg text-lg w-6 h-6 inline-flex justify-center items-center ${isSubTaskModalEdited ? 'text-sky-700' : 'text-gray-300'}`}
                         data-modal-toggle="crud-modal"
-                        onClick={() => { }}
-                        disabled={!progressChange}
+                        onClick={handleSaveSubTaskModal}
+                        disabled={!isSubTaskModalEdited}
                     >
                         <FaSave />
                         <span className="sr-only">Save</span>
