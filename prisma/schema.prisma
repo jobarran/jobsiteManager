@@ -78,7 +78,7 @@ model Project {
 }
 
 model Task {
-  id          String  @id @default(uuid())
+  id          String        @id @default(uuid())
   name        String
   location    String
   progress    String
@@ -86,7 +86,7 @@ model Task {
   contractor  String
   start       String
   end         String
-  priority    TaskPriority @default(normal)
+  priority    TaskPriority  @default(normal)
   status      ProjectStatus @default(upcoming)
   description String
 
@@ -99,7 +99,7 @@ model Task {
 }
 
 model SubTask {
-  id          String @id @default(uuid())
+  id          String        @id @default(uuid())
   name        String
   location    String
   progress    String
@@ -107,11 +107,26 @@ model SubTask {
   contractor  String
   start       String
   end         String
-  priority    TaskPriority @default(normal)
+  priority    TaskPriority  @default(normal)
   status      ProjectStatus @default(upcoming)
   description String
+
+  // Relations - Down
+  Todo Todo[]
 
   // Relations - Up
   task   Task   @relation(fields: [taskId], references: [id])
   taskId String
+}
+
+model Todo {
+  id          String  @id @default(uuid())
+  description String
+  date        String
+  done        Boolean @default(false)
+  favourite   Boolean @default(false)
+
+  // Relations - Up
+  subTask   SubTask @relation(fields: [subTaskId], references: [id])
+  subTaskId String
 }

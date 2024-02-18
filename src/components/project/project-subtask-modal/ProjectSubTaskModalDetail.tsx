@@ -1,6 +1,6 @@
 'use client'
 
-import { ProjectSubTaskModalHeader, ProjectSubTaskRangeValue } from "@/components";
+import { ProjectSubTaskModalHeader, ProjectSubTaskRangeValue, ProjectSubTaskToDo } from "@/components";
 import { useProjectStore } from "@/store";
 import { useEffect, useState } from "react";
 import { updateSubTask } from '../../../actions/task/update-subtask';
@@ -67,6 +67,7 @@ export const ProjectSubTaskModalDetail = () => {
                 progressValue={progressValue}
                 setProgressValue={setProgressValue}
             />
+            <ProjectSubTaskToDo />
         </div>
     );
 };
