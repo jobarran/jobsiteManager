@@ -25,6 +25,7 @@ export const ProjectSubTaskModalDetail = () => {
 
     useEffect(() => {
         setProgressValue(parseInt(subTaskModalData ? subTaskModalData?.progress : '0'))
+        setTodos(subTaskModalData ? subTaskModalData?.todos : [])
     }, [subTaskModalData])
     
     const updateProjectSubTask = (updatedSubTask: SubTask) => {

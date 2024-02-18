@@ -21,14 +21,8 @@ interface Props {
 
 export const ProjectSubTaskToDo = ({ todos = [], setTodos }: Props) => {
 
-    const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
-    const activeTaskId = useProjectStore(state => state.activeTaskId)
     const activeSubTaskId = useProjectStore(state => state.activeSubTaskId)
     const isSubTaskModalOpen = useProjectStore(state => state.isSubTaskModalOpen)
-
-    const subTaskModalData = activeProjectTasks
-        ?.find(task => task.id === activeTaskId)
-        ?.subTasks.find(subtask => subtask.id === activeSubTaskId);
 
     const [date, setDate] = useState({
         startDate: null,
@@ -37,8 +31,6 @@ export const ProjectSubTaskToDo = ({ todos = [], setTodos }: Props) => {
     const [description, setDescription] = useState('')
 
     useEffect(() => {
-        console.log(subTaskModalData)
-        setTodos(subTaskModalData ? subTaskModalData?.todos : [])
         setDate({
             startDate: null,
             endDate: null
