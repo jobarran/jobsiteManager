@@ -27,6 +27,8 @@ export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) =
     const openTaskModal = useProjectStore(state => state.openTaskModal)
     const closeSubTaskModal = useProjectStore(state => state.closeSubTaskModal)
     const setActiveTaskId = useProjectStore(state => state.setActiveTaskId)
+    const isSubTaskModalOpen = useProjectStore(state => state.isSubTaskModalOpen)
+
     const [hideTable, setHideTable] = useState(false)
 
     useEffect(() => {
@@ -132,9 +134,9 @@ export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) =
 
                                     <tbody key={index}>
                                         <tr
-                                            className="bg-white hover:bg-gray-50"
-                                            onClick={() => handleOpenTaskModal(item)}
-                                            style={{ cursor: 'pointer' }}
+                                            className={`bg-white hover:bg-gray-50 ${isSubTaskModalOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                            onClick={isSubTaskModalOpen ? undefined : () => handleOpenTaskModal(item)}
+                                            style={{ cursor: isSubTaskModalOpen ? 'auto' : 'pointer' }}
                                         >
                                             <td className={`${handleStatusColor()} pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-l-4 border-b-4 border-gray-50`}>
                                                 <div className='flex items-center'>

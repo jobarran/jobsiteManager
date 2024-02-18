@@ -11,6 +11,8 @@ export * from './ui/provider/Provider'
 
 export * from './ui/title/Title'
 
+export * from './ui/saving-alert/SavingAlert'
+
 export * from './project/project-table/ProjectTableBody'
 export * from './project/project-table/ProjectTableHeader'
 
@@ -43,3 +45,4 @@ export * from './ui/badges/PriorityBadgeLong'
 export * from './project/project-incidences-modal/ProjectTaskIncidenceModal'
 export * from './project/project-incidences-modal/ProjectSubTaskIncidenceModal'
 export * from './project/project-incidences-modal/ProjectIncidenceModal'
+

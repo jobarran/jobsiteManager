@@ -23,6 +23,8 @@ export const ProjectSubTaskToDo = ({ todos = [], setTodos }: Props) => {
 
     const activeSubTaskId = useProjectStore(state => state.activeSubTaskId)
     const isSubTaskModalOpen = useProjectStore(state => state.isSubTaskModalOpen)
+    const setSubTaskModalEditableTrue = useProjectStore(state => state.setSubTaskModalEditableTrue)
+
 
     const [date, setDate] = useState({
         startDate: null,
@@ -57,6 +59,7 @@ export const ProjectSubTaskToDo = ({ todos = [], setTodos }: Props) => {
                 subTaskId: activeSubTaskId
             };
             setTodos([...todos, newTodo]);
+            setSubTaskModalEditableTrue()
             setDate({
                 startDate: null,
                 endDate: null
@@ -67,20 +70,23 @@ export const ProjectSubTaskToDo = ({ todos = [], setTodos }: Props) => {
 
     const handleDeleteTodo = (index: number) => {
         const updatedTodos = [...todos];
-        updatedTodos.splice(index, 1); // Remove the todo at the specified index
+        updatedTodos.splice(index, 1); 
         setTodos(updatedTodos);
+        setSubTaskModalEditableTrue()
     };
 
     const toggleTodoDone = (index: number) => {
         const updatedTodos = [...todos];
         updatedTodos[index].done = !updatedTodos[index].done;
         setTodos(updatedTodos);
+        setSubTaskModalEditableTrue()
     }
 
     const toggleFav = (index: number) => {
         const updatedTodos = [...todos];
         updatedTodos[index].favourite = !updatedTodos[index].favourite;
         setTodos(updatedTodos);
+        setSubTaskModalEditableTrue()
     }
 
     return (
