@@ -33,7 +33,7 @@ export const ProjectSubTaskModalDetail = () => {
                 if (task.id === activeTaskId) {
                     const updatedSubTasks = task.subTasks.map(subtask => {
                         if (subtask.id === updatedSubTask.id) {
-                            return updatedSubTask; // Update the specific subtask
+                            return updatedSubTask; 
                         }
                         return subtask;
                     });
@@ -46,7 +46,7 @@ export const ProjectSubTaskModalDetail = () => {
     };
 
     const handleSaveSubTaskModal = () => {
-        if (subTaskModalData) {
+        if (subTaskModalData && todos) {
             setSubTaskModalEditableFalse()
             const updatedSubTask = {
                 ...subTaskModalData,
@@ -73,7 +73,7 @@ export const ProjectSubTaskModalDetail = () => {
                 setProgressValue={setProgressValue}
             />
             <ProjectSubTaskToDo
-                todos={todos}
+                todos={todos ? todos : []}
                 setTodos={setTodos}
             />
         </div>
