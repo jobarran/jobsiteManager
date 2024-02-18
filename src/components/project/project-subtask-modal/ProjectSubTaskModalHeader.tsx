@@ -36,11 +36,17 @@ export const ProjectSubTaskModalHeader = ({ handleSaveSubTaskModal }: Props) => 
     };
 
     const handleAlertConfirm = () => {
+        handleSaveSubTaskModal()
         closeSubTaskModal();
         setShowAlert(false);
     };
 
     const handleAlertCancel = () => {
+        closeSubTaskModal();
+        setShowAlert(false);
+    };
+
+    const handleAlertClose = () => {
         setShowAlert(false);
     };
 
@@ -51,6 +57,7 @@ export const ProjectSubTaskModalHeader = ({ handleSaveSubTaskModal }: Props) => 
                 <SavingAlert
                 handleAlertConfirm={handleAlertConfirm}
                 handleAlertCancel={handleAlertCancel}
+                handleAlertClose={handleAlertClose}
                 />
             )}
 
