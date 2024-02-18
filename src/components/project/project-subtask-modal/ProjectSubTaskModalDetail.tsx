@@ -5,6 +5,7 @@ import { useProjectStore } from "@/store";
 import { useEffect, useState } from "react";
 import { updateSubTask } from '../../../actions/task/update-subtask';
 import { SubTask } from "@/interfaces";
+import { createOrUpdateTodosBySubTask } from "@/actions";
 
 export const ProjectSubTaskModalDetail = () => {
 
@@ -13,12 +14,14 @@ export const ProjectSubTaskModalDetail = () => {
     const activeTaskId = useProjectStore(state => state.activeTaskId)
     const activeSubTaskId = useProjectStore(state => state.activeSubTaskId)
     const setProjectTasks = useProjectStore(state => state.setProjectTasks)
+    const closeSubTaskModal = useProjectStore(state => state.closeSubTaskModal)
 
     const subTaskModalData = activeProjectTasks
         ?.find(task => task.id === activeTaskId)
         ?.subTasks.find(subtask => subtask.id === activeSubTaskId);
 
     const [progressValue, setProgressValue] = useState(parseInt(subTaskModalData ? subTaskModalData?.progress : '0'));
+    const [todos, setTodos] = useState(subTaskModalData ? subTaskModalData?.todos : [])
 
     useEffect(() => {
         setProgressValue(parseInt(subTaskModalData ? subTaskModalData?.progress : '0'))
@@ -45,13 +48,15 @@ export const ProjectSubTaskModalDetail = () => {
     const handleSaveSubTaskModal = () => {
         if (subTaskModalData) {
             setSubTaskModalEditableFalse()
-            // Create an updated copy of subTaskModalData
             const updatedSubTask = {
                 ...subTaskModalData,
-                progress: progressValue.toString() // Update progress with progressValue
+                progress: progressValue.toString(),
+                todos: todos
             };
             updateSubTask(updatedSubTask, activeTaskId);
+            createOrUpdateTodosBySubTask(todos, activeSubTaskId)
             updateProjectSubTask(updatedSubTask)
+            closeSubTaskModal()
         }
     }
     
@@ -67,7 +72,10 @@ export const ProjectSubTaskModalDetail = () => {
                 progressValue={progressValue}
                 setProgressValue={setProgressValue}
             />
-            <ProjectSubTaskToDo />
+            <ProjectSubTaskToDo
+                todos={todos}
+                setTodos={setTodos}
+            />
         </div>
     );
 };

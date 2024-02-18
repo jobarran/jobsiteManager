@@ -112,7 +112,7 @@ model SubTask {
   description String
 
   // Relations - Down
-  Todo Todo[]
+  todos Todo[]
 
   // Relations - Up
   task   Task   @relation(fields: [taskId], references: [id])

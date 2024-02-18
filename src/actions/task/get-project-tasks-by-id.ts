@@ -22,7 +22,11 @@ export const getProjectTasksById = async (id: string) => {
         const tasks = await prisma.task.findMany({
             where: { projectId: id },
             include: {
-                subTasks: true,
+                subTasks: {
+                    include: {
+                        todos: true
+                    }
+                },
             },
         });
 

@@ -1,3 +1,4 @@
+import { Todo } from ".";
 
 
 export interface SubTask {
@@ -13,6 +14,7 @@ export interface SubTask {
     priority: SubTaskPriority;
     status: SubTaskStatus;
     taskId: string;
+    todos?: Todo[]
 }
 
 export type SubTaskStatus = 'ongoing' | 'finished' | 'upcoming' | '';

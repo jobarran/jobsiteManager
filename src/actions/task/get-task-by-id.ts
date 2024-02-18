@@ -22,7 +22,11 @@ export const getTaskById = async (id: string) => {
         const task = await prisma.task.findUnique({
             where: { id: id },
             include: {
-                subTasks: true,
+                subTasks: {
+                    include: {
+                        todos: true
+                    }
+                },
             },
         });
 

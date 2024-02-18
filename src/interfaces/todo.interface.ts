@@ -6,4 +6,5 @@ export interface Todo {
     date: string;
     done: boolean;
     favourite: boolean
+    subTaskId: string
 }
