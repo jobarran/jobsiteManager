@@ -1,5 +1,5 @@
-import { getProjectById } from "@/actions";
-import { Breadcrumb, ProjectTopMenu } from "@/components";
+import { getProjectById, getProjectTasksById } from "@/actions";
+import { Breadcrumb, ProjectDashboardChartsCard, ProjectDashboardTodoCard, ProjectTopMenu } from "@/components";
 
 interface Props {
   params: {
@@ -11,6 +11,7 @@ export default async function ProjectByIdPage({ params }: Props) {
 
   const { id } = params;
   const { ok, project } = await getProjectById(id);
+  const { tasks } = await getProjectTasksById(project!.id);
 
   const breadElements = [
     {
@@ -26,23 +27,38 @@ export default async function ProjectByIdPage({ params }: Props) {
   ]
 
   return (
-    <div>
 
-      <Breadcrumb element={ breadElements } />
+    <div className="dashboard-container flex flex-col items-center">
+      <Breadcrumb element={breadElements} />
 
-      {
-        project
-          ? <ProjectTopMenu
-            id={project.id}
-            name={project.name}
-            description={project.description}
-            status={project.status}
-          // selected={selected}
-          />
-          : <div></div>
-      }
+      {project ? (
+        <ProjectTopMenu
+          id={project.id}
+          name={project.name}
+          description={project.description}
+          status={project.status}
+        />
+      ) : (
+        <div></div>
+      )}
 
-      <h1>Dashboard Page</h1>
+      <div className="w-full xl:flex">
+        <div className="w-full xl:w-4/6 xl:mr-4 mb-4 xl:mb-0">
+          <div className="charts-card">
+            <ProjectDashboardChartsCard />
+          </div>
+        </div>
+        <div className="w-full xl:w-2/6">
+          <div className="todo-card">
+            {
+              project
+                ? <ProjectDashboardTodoCard tasks={tasks} />
+                : <div>Loading...</div>
+            }
+          </div>
+        </div>
+      </div>
     </div>
+
   );
 } 

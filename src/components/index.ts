@@ -46,3 +46,5 @@ export * from './project/project-incidences-modal/ProjectTaskIncidenceModal'
 export * from './project/project-incidences-modal/ProjectSubTaskIncidenceModal'
 export * from './project/project-incidences-modal/ProjectIncidenceModal'
 
+export * from './project/project-dashboard/ProjectDashboardTodoCard'
+export * from './project/project-dashboard/ProjectDashboardChartsCard'

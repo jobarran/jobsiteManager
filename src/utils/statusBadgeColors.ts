@@ -74,11 +74,11 @@ export const handleDateStatusTextColor = (Todo: Todo) => {
         const dateStatus = handleDateStatus(Todo.date)
         switch (dateStatus) {
             case 'today':
-                return 'text-lime-600'
+                return 'text-red-600' // Change to red for "today"
             case 'this-week':
-                return 'text-lime-600'
+                return 'text-yellow-600' // Change to yellow for "this-week"
             case 'next-week':
-                return 'text-amber-600'
+                return 'text-green-600' // Change to green for "next-week"
             default:
                 break;
         }
@@ -91,11 +91,11 @@ export const handleDateStatusBgColor = (Todo: Todo) => {
 
         switch (dateStatus) {
             case 'today':
-                return 'bg-lime-200'
+                return 'bg-red-200' // Change to red for "today"
             case 'this-week':
-                return 'bg-lime-200'
+                return 'bg-yellow-200' // Change to yellow for "this-week"
             case 'next-week':
-                return 'bg-amber-200'
+                return 'bg-green-200' // Change to green for "next-week"
             default:
         }
     }
