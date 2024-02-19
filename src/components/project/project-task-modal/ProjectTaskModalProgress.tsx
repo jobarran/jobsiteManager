@@ -26,7 +26,7 @@ const ProjectTaskModalProgress = () => {
     return (
         <div className="relative h-28 md:h-36 p-2 mr-1">
             <svg className="h-full w-full" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="18" cy="18" r="28" fill="none" className="stroke-current text-gray-200" strokeWidth="4"></circle>
+                <circle cx="18" cy="18" r="16" fill="none" className="stroke-current text-gray-200" strokeWidth="4"></circle>
                 <g className="origin-center -rotate-90 transform">
                     <circle
                         cx="18" cy="18" r="16" fill="none"
