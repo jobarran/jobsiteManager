@@ -66,7 +66,7 @@ export const ProjectTaskModalDistributionChart = () => {
 
 
     return (
-        <div className="relative md:h-36 h-28 p-2 mx-1">
+        <div className="relative h-28 md:h-36 p-2 mx-1">
             <svg className="h-full w-full" width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
                 <circle
                     cx="18"
