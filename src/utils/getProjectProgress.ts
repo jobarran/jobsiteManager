@@ -1,9 +1,9 @@
-import { ReducedTask, SubTask, Task } from '@/interfaces'
+import { Task } from '@/interfaces'
 import { getProgressBySubTaskIncidence } from '.';
 
 
 
-export const getProjectProgress = (tasks: Task[] | ReducedTask[] | undefined): number => {
+export const getProjectProgress = (tasks: Task[] | undefined): number => {
 
     if (!Array.isArray(tasks)) {
         return 0;
