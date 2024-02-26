@@ -74,6 +74,9 @@ export const ProjectTableBody = ({ data, head, status }: Props) => {
             name: item.code,
             description: item.desciption,
             status: item.status,
+            shortName: item.shortName,
+            location: item.location,
+            end: item.end
         })
         window.location.replace('/project/' + item.id) //Todo: here is the bug
     }
@@ -84,6 +87,9 @@ export const ProjectTableBody = ({ data, head, status }: Props) => {
             name: item.code,
             description: item.desciption,
             status: item.status,
+            shortName: item.shortName,
+            location: item.location,
+            end: item.end
         })
     }
 
