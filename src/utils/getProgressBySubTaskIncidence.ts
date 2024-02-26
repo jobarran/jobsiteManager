@@ -1,8 +1,8 @@
-import { SubTask } from '@/interfaces'
+import { FetchSubTask, SubTask } from '@/interfaces'
 
 
 
-export const getProgressBySubTaskIncidence = (subTasks: SubTask[] | undefined): number => {
+export const getProgressBySubTaskIncidence = (subTasks: SubTask[] | FetchSubTask[] | undefined): number => {
 
     if (!subTasks || subTasks.length === 0 || subTasks === undefined ) {
         return 0;
