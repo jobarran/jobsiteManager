@@ -40,6 +40,9 @@ export default async function ProjectByIdPage({ params }: Props) {
             name={project.name}
             description={project.description}
             status={project.status}
+            shortName={project.shortName ? project.shortName : ''}
+            location={project.location ? project.location : ''}
+            end={project.end ? project.end : ''}
           />
         ) : (
           <div></div>
@@ -62,7 +65,7 @@ export default async function ProjectByIdPage({ params }: Props) {
           </div>
         </div>
       </div>
-      
+
     </div>
   );
 } 

@@ -45,7 +45,7 @@ export default async function ProjectByIdDocsPage({ params }: Props) {
                     : <div></div>
             }
 
-            <h1>Docs Page</h1>
+            <h1>Docss Page</h1>
         </div>
     );
 } 
