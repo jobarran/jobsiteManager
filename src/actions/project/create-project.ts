@@ -6,15 +6,20 @@ import prisma from "@/lib/prisma";
 
 interface Props {
     name: string;
-    status: ProjectStatus;
-    description: string
+    status: ProjectStatus,
+    description: string,
+    leaderId: string | null,
+    location: string,
+    shortName: string
 }
 
-export const createProject = async ({name, status, description} :Props) => {
+export const createProject = async ({name, status, description, leaderId, location, shortName} :Props) => {
 
     const session = await auth();
     const userId = session?.user.id
     const userActiveCompany = session?.user.companyId
+    const leader = session?.user.id
+
 
     if (!userId) {
         return {
@@ -27,15 +32,21 @@ export const createProject = async ({name, status, description} :Props) => {
 
         const project = await prisma.project.create({
             data: {
-                name: name,
+                name,
                 status: status|| 'upcoming',
-                description: description,
+                description,
+                location,
+                shortName,
                 companyId: userActiveCompany || '',
+                leaderId: leaderId || null 
             },
             select: {
                 name: true,
                 status: true,
                 description: true,
+                leader: true,
+                location: true,
+                shortName: true
             }
         })
 

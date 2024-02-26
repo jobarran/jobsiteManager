@@ -1,4 +1,3 @@
-import { useCompanyStore } from "@/store";
 
 
 export default function CompanyPage() {

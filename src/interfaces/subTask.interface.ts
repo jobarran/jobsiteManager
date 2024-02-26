@@ -17,6 +17,11 @@ export interface SubTask {
     todos?: Todo[]
 }
 
+export interface FetchSubTask {
+    incidence: string;
+    progress: string;
+}
+
 export type SubTaskStatus = 'ongoing' | 'finished' | 'upcoming' | '';
 export type SubTaskPriority = 'normal' | 'high' | 'urgent' | '';
 

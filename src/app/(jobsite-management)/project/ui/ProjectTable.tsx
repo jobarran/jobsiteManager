@@ -2,50 +2,65 @@
 
 import { ProjectTableBody, ProjectTableHeader } from '@/components'
 import useQuickSearch from '@/hooks/useQuickSearch'
-import { Project } from '@/interfaces'
-import { useProjectStore } from '@/store'
+import { FetchProject, Project } from '@/interfaces'
+import { useCompanyStore, useProjectStore } from '@/store'
+import { getInitials, getProjectProgress } from '@/utils'
 import React, { useEffect, useState } from 'react'
 
-export const ProjectTable = (projects: any) => {
+interface Props {
+    projects: FetchProject[];
+}
 
+export const ProjectTable: React.FC<Props> = ({ projects }) => {
+    
     const unSetProject = useProjectStore(state => state.unSetProject)
+    const setActiveCompanyProjects = useCompanyStore((state) => state.setActiveCompanyProjects)
+    const [companyProjects, setCompanyProjects] = useState<FetchProject[]>([])
 
     useEffect(() => {
-        unSetProject()
-    }, [])
+        setCompanyProjects(projects)
+        setActiveCompanyProjects(projects)
+        unSetProject();
+    }, []);
 
-    const [filteredData, setSearch, clearSearch, setNewData] = useQuickSearch(projects.projects);
+    useEffect(() => {
+        setCompanyProjects(projects)
+        //TOdo: setNewData (useQuickSearch)
+        unSetProject();
+    }, [companyProjects]);
+
+    // const [filteredData, setSearch, clearSearch, setNewData] = useQuickSearch({ projects });
     const [searchValue, setSearchValue] = useState('');
 
-    const head = ['Name', 'End', 'Workers', 'Progress', 'Leader', 'Shortcuts']
+    const head = ['Name', 'Location', 'End', 'Workers', 'Progress', 'Leader', 'Shortcuts']
 
-    const data = filteredData ? filteredData.map((project) => ({
+    const data = companyProjects ? companyProjects.map((project) => ({
         name: project.name,
-        end: '16/08/2024',
-        workers: '6',
-        progress: '70%',
-        leader: 'JB',
+        location: project.location || '', // Handle possible null values
+        end: project.end,
+        workers: '8',
+        progress: Array.isArray(project.tasks) ? getProjectProgress(project.tasks) : 0,
+        leader: getInitials(`${project.leader?.name || ''} ${project.leader?.lastName || ''}`),
         status: project.status,
         id: project.id
-    }))
-        : [{
-            name: '',
-            end: '',
-            workers: '',
-            progress: '',
-            leader: '',
-            status: '',
-            id: ''
-        }];
+    })) : [{
+        name: '',
+        end: '',
+        workers: '',
+        progress: '',
+        leader: '',
+        status: '',
+        id: ''
+    }];
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
-        setSearch(value);
+        // setSearch(value);
         setSearchValue(value);
     };
 
     const handleClearSearch = () => {
-        clearSearch();
+        // clearSearch();
         setSearchValue('');
     };
 

@@ -1,11 +1,22 @@
 'use server'
 
 import prisma from "@/lib/prisma"
+import { UserRole } from "@prisma/client";
 import bcryptjs from 'bcryptjs';
+import { auth } from "@/auth.config";
 
+interface Props {
+    name: string,
+    lastName: string,
+    email: string,
+    password: string,
+    role?: UserRole,
+}
 
+export const registerUser = async ({name, lastName, email, password, role}:Props) => {
 
-export const registerUser = async (name: string, lastName: string,  email: string, password: string) => {
+    const session = await auth();
+    const userActiveCompany = session?.user.companyId
 
     try {
 
@@ -14,8 +25,9 @@ export const registerUser = async (name: string, lastName: string,  email: strin
                 name: name,
                 lastName: lastName,
                 email: email.toLowerCase(),
-                password: bcryptjs.hashSync( password ),
-                role: 'admin'
+                password: bcryptjs.hashSync(password),
+                role: role ? role : 'admin',
+                companyId: userActiveCompany || '',
             },
             select: {
                 id: true,
@@ -31,7 +43,7 @@ export const registerUser = async (name: string, lastName: string,  email: strin
             user: user,
             message: 'User created'
         }
-        
+
     } catch (error) {
         console.log(error)
         return {

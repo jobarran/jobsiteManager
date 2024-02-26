@@ -1,79 +1,42 @@
-import type { activeCompany } from "@/interfaces";
+import type { StoreActiveCompany, StoreActiveCompanyProject, StoreActiveCompanyUsers } from "@/interfaces";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 
 interface State {
 
-    activeCompany: activeCompany
-
-    setCompany: (company: activeCompany) => void
-    unSetCompany: () => void
-    getActiveCompanyName: () => string
-
-
+    activeCompany: StoreActiveCompany | null
+    activeCompanyProjects: StoreActiveCompanyProject[] | null
+    activeCompanyUsers: StoreActiveCompanyUsers[] | null
+    setActiveCompany: (company: StoreActiveCompany) => void
+    setActiveCompanyProjects: (projects: StoreActiveCompanyProject[]) => void
+    setActiveCompanyUsers: (projects: StoreActiveCompanyUsers[]) => void
+    unSetActiveCompany: () => void
+    unSetActiveCompanyProjects: () => void
+    unSetActiveCompanyUsers: () => void
 }
 
 export const useCompanyStore = create<State>()(
 
     persist(
         (set, get) => ({
-            activeCompany: {
-                id: '',
-                name: '',
-                employeeFields: [],
-                employeeRoles: [],
-                userPossitions: [],
-                companyLogo: '',
-                users: [],
-                projects: [],
-            },
 
+            activeCompany: null,
+            activeCompanyProjects: null,
+            activeCompanyUsers: null,
             //Methods:
-            setCompany: (company: activeCompany) => {
-                // Extract only the necessary fields from users and projects
-                const users = (company?.users || []).map(user => ({ id: user.id, name: user.name, lastName: user.lastName }));
-                const projects = (company?.projects || []).map(project => ({ id: project.id, name: project.name, status: project.status }));
-
-                set((state) => ({
-                    ...state,
-                    activeCompany: {
-                        id: company?.id || '',
-                        name: company?.name || '',
-                        employeeFields: company?.employeeFields || [],
-                        employeeRoles: company?.employeeRoles || [],  
-                        userPossitions: company?.userPossitions || [],
-                        companyLogo: company?.companyLogo || '',
-                        users: users || [],
-                        projects: projects || [],
-                    }
-                }));
-            },
-
-            unSetCompany: () => {
-                set({
-                    activeCompany: {
-                        id: '',
-                        name: '',
-                        employeeFields: [],
-                        employeeRoles: [],
-                        userPossitions: [],
-                        companyLogo: '',
-                        users: [],
-                        projects: [],
-                    },
-                })
-            },
-
-            getActiveCompanyName: () => {
-                return  get().activeCompany.name
-            }
+            setActiveCompany: (company) => set({ activeCompany: company }),
+            setActiveCompanyProjects: (projects) => set({ activeCompanyProjects: projects }),
+            setActiveCompanyUsers: (users) => set({ activeCompanyProjects: users }),
+            unSetActiveCompany: () => set({ activeCompany: null, activeCompanyProjects: null, activeCompanyUsers: null}),
+            unSetActiveCompanyProjects: () => set({ activeCompanyProjects: null }),
+            unSetActiveCompanyUsers: () => set({ activeCompanyUsers: null }),
         }),
+
         {
             name: 'active-company',
             // skipHydration: true,
         }
     )
 
-      
 )

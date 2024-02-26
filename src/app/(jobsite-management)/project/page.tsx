@@ -16,6 +16,7 @@ export default async function () {
     const companyProjects = await getCompanyProjects();
     const projects = companyProjects.projects
 
+    console.log(projects)
 
     return (
 
@@ -27,7 +28,7 @@ export default async function () {
 
 
             {
-                companyProjects
+                companyProjects && projects
                     ? <ProjectTable projects={projects} />
                     : <div>Loading...</div>
             }

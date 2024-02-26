@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Project" ALTER COLUMN "end" DROP NOT NULL,
+ALTER COLUMN "location" DROP NOT NULL,
+ALTER COLUMN "shortName" DROP NOT NULL;

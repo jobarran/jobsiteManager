@@ -1,37 +1,15 @@
 'use client';
 
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react';
 import { IoSearchOutline } from 'react-icons/io5'
 import { Avatar } from './Avatar';
 import { useSession } from 'next-auth/react';
-import { getCompanyByUserActiveCompany, logout } from '@/actions';
+import { logout } from '@/actions';
 import { NameAndSideToggle } from './NameAndSideToggle';
-import { useCompanyStore, useProjectStore } from '@/store';
 
 export const TopMenu = () => {
 
   const { data: session } = useSession();
-  const activeCompany = useCompanyStore((state) => state.activeCompany)
-  const setActiveCompany = useCompanyStore((state) => state.setCompany)
-
-  useEffect(() => {
-    const fetchCompany = async () => {
-      if (activeCompany.id === '') {
-
-        const companyResponse = await getCompanyByUserActiveCompany();
-        if (companyResponse.ok && companyResponse.company) {
-          const { companyLogo, ...rest } = companyResponse.company;
-          const updatedCompany = {
-            ...rest,
-            companyLogo: companyLogo ?? 'default-logo-url',
-          };
-          setActiveCompany(updatedCompany);
-        } 
-      } 
-    };
-    fetchCompany();
-  }, []);
 
   return (
 

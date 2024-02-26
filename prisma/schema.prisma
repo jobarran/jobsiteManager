@@ -41,7 +41,8 @@ model User {
   companyId     String?
 
   // Relations - Down
-  ownedCompany Company[] @relation("CompanyOwner")
+  ownedCompany    Company[] @relation("CompanyOwner")
+  leadingProjects Project[] @relation("ProjectLeader")
 }
 
 model Company {
@@ -64,12 +65,17 @@ model Company {
 model Project {
   id          String        @id @default(uuid())
   name        String
+  shortName   String?
+  location    String?
+  end         String?
   description String
   status      ProjectStatus @default(ongoing)
 
   // Relations - Up
   company   Company @relation(fields: [companyId], references: [id])
   companyId String
+  leader    User?   @relation("ProjectLeader", fields: [leaderId], references: [id])
+  leaderId  String?
 
   // Relations - Down
   tasks Task[]

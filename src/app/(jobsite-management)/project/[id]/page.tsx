@@ -28,37 +28,41 @@ export default async function ProjectByIdPage({ params }: Props) {
 
   return (
 
-    <div className="dashboard-container flex flex-col items-center">
+    <div>
+
       <Breadcrumb element={breadElements} />
 
-      {project ? (
-        <ProjectTopMenu
-          id={project.id}
-          name={project.name}
-          description={project.description}
-          status={project.status}
-        />
-      ) : (
-        <div></div>
-      )}
+      <div className="dashboard-container flex flex-col items-center">
 
-      <div className="w-full xl:flex">
-        <div className="w-full xl:w-4/6 xl:mr-4 mb-4 xl:mb-0">
-          <div className="charts-card">
-            <ProjectDashboardChartsCard />
+        {project ? (
+          <ProjectTopMenu
+            id={project.id}
+            name={project.name}
+            description={project.description}
+            status={project.status}
+          />
+        ) : (
+          <div></div>
+        )}
+
+        <div className="w-full xl:flex">
+          <div className="w-full xl:w-4/6 xl:mr-4 mb-4 xl:mb-0">
+            <div className="charts-card">
+              <ProjectDashboardChartsCard />
+            </div>
           </div>
-        </div>
-        <div className="w-full xl:w-2/6">
-          <div className="todo-card">
-            {
-              project
-                ? <ProjectDashboardTodoCard tasks={tasks} />
-                : <div>Loading...</div>
-            }
+          <div className="w-full xl:w-2/6">
+            <div className="todo-card">
+              {
+                project
+                  ? <ProjectDashboardTodoCard tasks={tasks} />
+                  : <div>Loading...</div>
+              }
+            </div>
           </div>
         </div>
       </div>
+      
     </div>
-
   );
 } 

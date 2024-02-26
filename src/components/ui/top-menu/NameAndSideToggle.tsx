@@ -9,7 +9,7 @@ import { useEffect, useState } from "react"
 export const NameAndSideToggle = () => {
 
   const openSideMenu = useUIStore(state => state.openSideMenu)
-  const activeCompanyName = useCompanyStore((state) => state.getActiveCompanyName())
+  const activeCompany = useCompanyStore((state) => state.activeCompany)
 
   const [loaded, setLoaded] = useState(false)
 
@@ -40,7 +40,7 @@ export const NameAndSideToggle = () => {
         {
           (loaded) && (
             <a href="/" className="flex ms-2 md:me-24">
-              <span className={`text-lg ${titleFont.className} antialiased text-sky-600 `}>{activeCompanyName}</span>
+              <span className={`text-lg ${titleFont.className} antialiased text-sky-600 `}>{activeCompany?.name}</span>
             </a>
 
           )

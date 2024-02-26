@@ -16,10 +16,9 @@ interface Props {
     data: any,
     head: string[],
     status: string,
-    projectId: string
 }
 
-export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) => {
+export const ProjectTaskTableBody = ({ data, head, status }: Props) => {
 
     const [columnWidths, setColumnWidths] = useState<number[]>([]);
     const tableRef = useRef<HTMLTableElement>(null);
@@ -33,8 +32,8 @@ export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) =
 
     useEffect(() => {
         if (tableRef.current) {
-            const newColumnWidths = Array(head.length).fill(100); // Set initial width as per your preference
-            setColumnWidths(newColumnWidths);
+            const newColumnWidths = Array(head.length).fill(100)
+            setColumnWidths(newColumnWidths)
         }
     }, [head]);
 
@@ -86,8 +85,6 @@ export const ProjectTaskTableBody = ({ data, head, status, projectId }: Props) =
         }
         return <span>{incidence} %</span>;
     };
-
-    // const columnWidths = ['auto', '100px', '100px', '250px', '150px', '100px', '100px', '150px'];
 
     return (
 

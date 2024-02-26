@@ -1,4 +1,4 @@
-import { SubTask } from ".";
+import { FetchSubTask, SubTask } from ".";
 
 
 export interface Task {
@@ -15,6 +15,13 @@ export interface Task {
     status: TaskStatus;
     projectId: string;
     subTasks: SubTask[]
+}
+
+export interface FetchTask {
+    id: string;
+    name: string;
+    incidence: string;
+    subTasks: FetchSubTask[];
 }
 
 export type TaskStatus = 'ongoing' | 'finished' | 'upcoming' | '';

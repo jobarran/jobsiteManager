@@ -85,9 +85,9 @@ export const ProjectTaskTable = ({ tasks, projectId }: Props) => {
             />
 
             <div>
-                <ProjectTaskTableBody data={data} head={head} status={'ongoing'} projectId={projectId} />
-                <ProjectTaskTableBody data={data} head={head} status={'upcoming'} projectId={projectId} />
-                <ProjectTaskTableBody data={data} head={head} status={'finished'} projectId={projectId} />
+                <ProjectTaskTableBody data={data} head={head} status={'ongoing'} />
+                <ProjectTaskTableBody data={data} head={head} status={'upcoming'} />
+                <ProjectTaskTableBody data={data} head={head} status={'finished'} />
             </div>
 
         </div>
