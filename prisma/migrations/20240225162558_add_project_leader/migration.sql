@@ -7,10 +7,18 @@
 
 */
 -- AlterTable
-ALTER TABLE "Project" ADD COLUMN     "end" TEXT NOT NULL,
-ADD COLUMN     "leaderId" TEXT,
-ADD COLUMN     "location" TEXT NOT NULL,
-ADD COLUMN     "shortName" TEXT NOT NULL;
+ALTER TABLE "Project"
+ADD COLUMN "end" TEXT DEFAULT 'Unknown' NOT NULL,
+ADD COLUMN "leaderId" TEXT,
+ADD COLUMN "location" TEXT DEFAULT 'Unknown' NOT NULL,
+ADD COLUMN "shortName" TEXT DEFAULT 'Unknown' NOT NULL;
+
+-- Update Existing Data (if necessary)
+-- You may need to customize this update query based on your application's requirements
+UPDATE "Project" SET "end" = 'Unknown' WHERE "end" IS NULL;
+UPDATE "Project" SET "location" = 'Unknown' WHERE "location" IS NULL;
+UPDATE "Project" SET "shortName" = 'Unknown' WHERE "shortName" IS NULL;
 
 -- AddForeignKey
-ALTER TABLE "Project" ADD CONSTRAINT "Project_leaderId_fkey" FOREIGN KEY ("leaderId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Project"
+ADD CONSTRAINT "Project_leaderId_fkey" FOREIGN KEY ("leaderId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
