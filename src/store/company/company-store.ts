@@ -5,7 +5,7 @@ import { persist } from "zustand/middleware";
 
 interface State {
 
-    activeCompany: StoreActiveCompany | null
+    activeCompany: StoreActiveCompany | null | undefined
     activeCompanyProjects: StoreActiveCompanyProject[] | null
     activeCompanyUsers: StoreActiveCompanyUsers[] | null
     setActiveCompany: (company: StoreActiveCompany) => void

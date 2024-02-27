@@ -13,5 +13,5 @@ export interface Company {
 
 export interface StoreActiveCompany {
     id?: string;
-    name: string;
+    name?: string;
 }

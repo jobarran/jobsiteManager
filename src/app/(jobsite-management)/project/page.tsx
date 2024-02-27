@@ -1,4 +1,4 @@
-import { getCompanyByUserActiveCompany, getCompanyProjects } from "@/actions";
+import { getCompanyProjects } from "@/actions";
 import { Breadcrumb, Title } from "@/components";
 import Link from "next/link";
 import { ProjectTable } from "./ui/ProjectTable";
@@ -15,8 +15,6 @@ export default async function () {
 
     const companyProjects = await getCompanyProjects();
     const projects = companyProjects.projects
-
-    console.log(projects)
 
     return (
 

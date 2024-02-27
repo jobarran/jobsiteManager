@@ -20,23 +20,29 @@ interface Props {
 
 export const ProjectTableBody = ({ data, head, status }: Props) => {
 
-    // const [columnWidths, setColumnWidths] = useState<number[]>([]);
     const tableRef = useRef<HTMLTableElement>(null);
 
     const setProject = useProjectStore(state => state.setProject)
     const [hideTable, setHideTable] = useState(false)
 
-    // useEffect(() => {
-    //     if (tableRef.current) {
-    //         const newColumnWidths = Array(head.length).fill(100)
-    //         setColumnWidths(newColumnWidths)
-    //     }
-    // }, [head]);
-
     const filteredData = data.filter((item: any) => {
         const desiredStatus = status;
         return item.status === desiredStatus;
     });
+
+    useEffect(() => {
+        adjustColumnWidth();
+    }, [data]);
+
+    const adjustColumnWidth = () => {
+        const longestText = data.reduce((maxLength: number, item: any) => {
+            return Math.max(maxLength, item.name.length);
+        }, 0);
+        if (tableRef.current) {
+            const firstColumnWidth = Math.min(400, longestText * 10); 
+            tableRef.current.style.setProperty('--first-column-width', `${firstColumnWidth}px`);
+        }
+    };
 
     const handleHideTable = () => {
         setHideTable(!hideTable)
@@ -93,7 +99,6 @@ export const ProjectTableBody = ({ data, head, status }: Props) => {
         })
     }
 
-    const columnWidths = ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', '50px'];
     const tableClassName = "w-full text-sm text-left rtl:text-right text-gray-500";
 
 
@@ -109,7 +114,7 @@ export const ProjectTableBody = ({ data, head, status }: Props) => {
                 <h6 className="text-lg">{`${status.toUpperCase()} Projects`}</h6>
             </button>
 
-            <div className="ml-8">
+            <div className="ml-2">
 
                 {
                     Array.from(filteredData).length === 0
@@ -117,7 +122,9 @@ export const ProjectTableBody = ({ data, head, status }: Props) => {
                         :
                         <table
                             hidden={hideTable}
-                            className={tableClassName}                        >
+                            className={tableClassName}
+                            ref={tableRef} 
+                        >
 
                             <thead className="text-xs text-uppercase hidden sm:table-header-group">
                                 <tr>
@@ -126,7 +133,11 @@ export const ProjectTableBody = ({ data, head, status }: Props) => {
                                             key={index}
                                             scope="col"
                                             className={`pl-2 py-3`}
-                                            style={{ minWidth: '75px', width: columnWidths[index] }}
+                                            style={{
+                                                minWidth: '75px',
+                                                width: index === 0 ? 'var(--first-column-width)' : 'auto',
+                                                textAlign: index === 0 ? 'left' : 'center', 
+                                            }}
                                         >
                                             {title}
                                         </th>
@@ -148,20 +159,20 @@ export const ProjectTableBody = ({ data, head, status }: Props) => {
                                         style={{ cursor: 'pointer' }}
                                     >
                                         <td className={`${handleStatusColor()} pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-l-4 border-b-4 border-gray-50`}>
-                                            <span className="hidden 2xl:inline">{truncateString(item.name, 45)}</span> {/* Show full text for large screens and above */}
-                                            <span className="hidden 2xl:hidden lg:inline">{truncateString(item.name, 15)}</span> {/* Show truncated text for medium screens */}
-                                            <span className="lg:hidden">{truncateString(item.name, 10)}</span> {/* Show further truncated text for small screens */}
+                                            <span className="hidden md:inline">{truncateString(item.name, 45)}</span> {/* Show full text for large screens and above */}
+                                            <span className="hidden md:hidden sm:inline">{truncateString(item.name, 15)}</span> {/* Show truncated text for medium screens */}
+                                            <span className="sm:hidden">{truncateString(item.name, 10)}</span> {/* Show further truncated text for small screens */}
                                         </td>
-                                        <td className="pl-2 py-3 hidden sm:table-cell font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
+                                        <td className="pl-2 py-3 hidden sm:table-cell font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50 text-center">
                                             {item.location}
                                         </td>
-                                        <td className="pl-2 py-3 hidden sm:table-cell font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
+                                        <td className="pl-2 py-3 hidden sm:table-cell font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50 text-center">
                                             {item.end}
                                         </td>
-                                        <td className="pl-2 py-3 hidden sm:table-cell font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
+                                        <td className="pl-2 py-3 hidden sm:table-cell font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50 text-center">
                                             {item.workers}
                                         </td>
-                                        <td className="pl-2 pr-3 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
+                                        <td className="pl-2 pr-3 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50 text-center">
                                             <div
                                                 className="w-full bg-neutral-100 flex items-center"
                                                 style={{ minWidth: '75px' }}
@@ -174,13 +185,13 @@ export const ProjectTableBody = ({ data, head, status }: Props) => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="pl-2 py-2 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
+                                        <td className="pl-2 py-2 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50 text-center">
                                             <div className="relative inline-flex items-center justify-center h-8 w-8 overflow-hidden bg-gray-100 rounded-full">
                                                 <span className="font-small text-gray-600">{item.leader}</span>
                                             </div>
                                         </td>
-                                        <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50">
-                                            <div className='flex items-center'>
+                                        <td className="pl-2 py-3 font-medium text-gray-900 whitespace-nowrap border-b-4 border-gray-50 text-center"> {/* Centering text */}
+                                            <div className='flex items-center justify-center'>
                                                 <Link
                                                     href="/project/[id]" as={`/project/${item.id}`}
                                                     className="md:flex hidden items-center pr-2 text-gray-400 rounded-lg"

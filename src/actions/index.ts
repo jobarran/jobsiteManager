@@ -3,7 +3,7 @@ export * from './auth/logout'
 export * from './auth/register'
 
 export * from './company/create-company'
-export * from './company/get-company-by-user-active-company'
+export * from './company/get-company-name-by-active-user'
 export * from './company/get-company-projects'
 
 export * from './project/create-project'

@@ -4,12 +4,30 @@ import Link from 'next/link'
 import { IoSearchOutline } from 'react-icons/io5'
 import { Avatar } from './Avatar';
 import { useSession } from 'next-auth/react';
-import { logout } from '@/actions';
+import { getCompanyNameByActiveUser, logout } from '@/actions';
 import { NameAndSideToggle } from './NameAndSideToggle';
+import { useEffect } from 'react';
+import { useCompanyStore } from '@/store';
 
 export const TopMenu = () => {
 
   const { data: session } = useSession();
+  const activeCompany = useCompanyStore((state) => state.activeCompany)
+  const setActiveCompany = useCompanyStore((state) => state.setActiveCompany)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!activeCompany) {
+        const data = await getCompanyNameByActiveUser();
+        setActiveCompany({
+          id: data.company?.id,
+          name: data.company?.name
+        });
+      }
+    };
+    fetchData();
+  }, []);
+
 
   return (
 

@@ -5,7 +5,7 @@ import prisma from '@/lib/prisma';
 
 
 
-export const getCompanyByUserActiveCompany = async() => {
+export const getCompanyNameByActiveUser = async() => {
 
   const session = await auth();
 
@@ -22,22 +22,26 @@ export const getCompanyByUserActiveCompany = async() => {
       where: {
         id: session.user.companyId
       },
-      include: {
-        projects: {
-          select: {
-              id: true,
-              name: true,
-              status: true
-          }
-        },
-        users: {
-          select: {
-              id: true,
-              name: true,
-              lastName: true
-          }
-        }
+      select: {
+        id: true,
+        name: true,
       }
+      // include: {
+      //   projects: {
+      //     select: {
+      //         id: true,
+      //         name: true,
+      //         status: true
+      //     }
+      //   },
+      //   users: {
+      //     select: {
+      //         id: true,
+      //         name: true,
+      //         lastName: true
+      //     }
+      //   }
+      // }
     })
     
     return {
