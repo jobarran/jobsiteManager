@@ -1,7 +1,7 @@
 'use client'
 
 import { useProjectStore } from "@/store";
-import { getInitials, truncateString } from "@/utils";
+import { truncateString } from "@/utils";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { AiFillDownCircle } from "react-icons/ai"
@@ -39,7 +39,7 @@ export const ProjectTableBody = ({ data, head, status }: Props) => {
             return Math.max(maxLength, item.name.length);
         }, 0);
         if (tableRef.current) {
-            const firstColumnWidth = Math.min(400, longestText * 10); 
+            const firstColumnWidth = Math.min(400, longestText * 10);
             tableRef.current.style.setProperty('--first-column-width', `${firstColumnWidth}px`);
         }
     };
@@ -118,12 +118,17 @@ export const ProjectTableBody = ({ data, head, status }: Props) => {
 
                 {
                     Array.from(filteredData).length === 0
-                        ? <div className="italic text-center bg-white p-2 w-full">{`No ${status} projects found`}</div>
+                        ? <div
+                            hidden={hideTable}
+                            className="italic text-center bg-white p-2 w-full"
+                        >
+                            {`No ${status} projects found`}
+                        </div>
                         :
                         <table
                             hidden={hideTable}
                             className={tableClassName}
-                            ref={tableRef} 
+                            ref={tableRef}
                         >
 
                             <thead className="text-xs text-uppercase hidden sm:table-header-group">
@@ -136,7 +141,7 @@ export const ProjectTableBody = ({ data, head, status }: Props) => {
                                             style={{
                                                 minWidth: '75px',
                                                 width: index === 0 ? 'var(--first-column-width)' : 'auto',
-                                                textAlign: index === 0 ? 'left' : 'center', 
+                                                textAlign: index === 0 ? 'left' : 'center',
                                             }}
                                         >
                                             {title}

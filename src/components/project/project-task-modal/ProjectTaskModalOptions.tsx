@@ -1,15 +1,10 @@
 import { MdOutlineAdd } from 'react-icons/md';
-import { BiMessageRounded } from 'react-icons/bi';
-import { FaListUl, FaPercentage } from 'react-icons/fa';
+import { FaPercentage } from 'react-icons/fa';
 import { IncidenceModalType, ModalType } from '@/interfaces';
 import { useProjectStore } from '@/store';
+import { FaChartBar } from "react-icons/fa";
 
-interface Props {
-    taskModalOption: 'list' | 'messages',
-    setTaskModalOption: (option: 'list' | 'messages') => void,
-}
-
-export const ProjectTaskModalOptions = ({ setTaskModalOption, taskModalOption }: Props) => {
+export const ProjectTaskModalOptions = () => {
 
     const openSubTaskModal = useProjectStore(state => state.openSubTaskModal)
     const closeSubTaskModal = useProjectStore(state => state.closeSubTaskModal)
@@ -21,10 +16,13 @@ export const ProjectTaskModalOptions = ({ setTaskModalOption, taskModalOption }:
         openSubTaskModal(ModalType.New)
     }
 
-    const handleOpenIncidenceModal = () => {
+    const handleOpenIncidenceModal = (type: string) => {
         closeSubTaskModal()
         closeIncidenceModal()
-        openIncidenceModal(IncidenceModalType.Subtask)
+        if (type === 'subtask') {
+            openIncidenceModal(IncidenceModalType.Subtask)
+        } else
+        openIncidenceModal(IncidenceModalType.Progress)
     };
 
     return (
@@ -32,7 +30,7 @@ export const ProjectTaskModalOptions = ({ setTaskModalOption, taskModalOption }:
         <div className="flex justify-start">
 
             <button
-                className=" inline-flex justify-center items-center p-2 border border-gray-300 text-sm font-medium text-gray-400 rounded-lg hover:bg-gray-100 hover:text-primary-700 mr-2"
+                className=" inline-flex justify-center items-center p-2 border border-gray-300 text-sm font-medium text-gray-400 hover:text-gray-700 rounded-lg hover:bg-gray-100 mr-2"
                 type="button"
                 onClick={handleNewSubTask}
             >
@@ -43,31 +41,22 @@ export const ProjectTaskModalOptions = ({ setTaskModalOption, taskModalOption }:
             <button
                 className="text-gray-400 bg-transparent p-2 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 rounded-lg inline-flex justify-center items-center mr-2 "
                 type="button"
-                onClick={handleOpenIncidenceModal}
+                onClick={()=>handleOpenIncidenceModal('subtask')}
             >
                 <FaPercentage />
                 <p className='ml-2'>Incidences</p>
             </button>
 
             <button
-                type="button"
                 className="text-gray-400 bg-transparent p-2 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 rounded-lg inline-flex justify-center items-center mr-2 "
-                data-modal-toggle="crud-modal"
-                onClick={() => setTaskModalOption('list')}
+                type="button"
+                onClick={()=>handleOpenIncidenceModal('progress')}
             >
-                <FaListUl size={20} />
-                <span className="sr-only">Edit modal</span>
+                <FaChartBar />
+                <p className='ml-2'>Progress</p>
             </button>
 
-            <button
-                type="button"
-                className="text-gray-400 bg-transparent p-2 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 rounded-lg inline-flex justify-center items-center mr-2 "
-                data-modal-toggle="crud-modal"
-                onClick={() => setTaskModalOption('messages')}
-            >
-                <BiMessageRounded size={20} />
-                <span className="sr-only">Edit modal</span>
-            </button>
+
 
 
         </div>

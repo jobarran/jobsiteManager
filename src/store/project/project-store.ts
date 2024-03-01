@@ -42,7 +42,8 @@ enum ModalType {
 
 enum IncidenceModalType {
     Task = "task",
-    Subtask = "subtask"
+    Subtask = "subtask",
+    Progress = 'progress'
 }
 
 export const useProjectStore = create<State>()((set) => ({

@@ -10,7 +10,6 @@ import { ProjectTaskModalSubTaskTable } from "./ProjectTaskModalSubTaskTable";
 export const ProjectTaskModalDetail = () => {
 
     const [isEditable, setIsEditable] = useState(false)
-    const [taskModalOption, setTaskModalOption] = useState<'list' | 'messages'>('list');
 
     const handleIsEditable = () => {
         setIsEditable(true)
@@ -26,10 +25,7 @@ export const ProjectTaskModalDetail = () => {
 
             <div className="grid gap-4 mb-4 grid-cols-2 "></div>
 
-            <ProjectTaskModalOptions
-                taskModalOption={taskModalOption}
-                setTaskModalOption={setTaskModalOption}
-            />
+            <ProjectTaskModalOptions />
 
             <div className="grid gap-4 mb-4 grid-cols-2 "></div>
 

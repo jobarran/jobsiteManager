@@ -1,4 +1,5 @@
 export enum IncidenceModalType {
     Task = "task",
-    Subtask = "subtask"
+    Subtask = "subtask",
+    Progress = 'progress',
 }

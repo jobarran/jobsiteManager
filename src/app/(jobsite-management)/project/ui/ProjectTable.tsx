@@ -40,7 +40,7 @@ export const ProjectTable: React.FC<Props> = ({ projects }) => {
         end: project.end,
         workers: '8',
         progress: Array.isArray(project.tasks) ? getProjectProgress(project.tasks) : 0,
-        leader: getInitials(`${project.leader?.name || ''} ${project.leader?.lastName || ''}`),
+        leader: (project.leader && project.leader.name ? project.leader.name[0] : '') + (project.leader && project.leader.lastName ? project.leader.lastName[0] : ''),
         status: project.status,
         id: project.id
     })) : [{

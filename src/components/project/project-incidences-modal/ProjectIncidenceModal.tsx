@@ -1,6 +1,6 @@
 'use client'
 
-import { ProjectSubTaskIncidenceModal, ProjectSubTaskModal, ProjectTaskIncidenceModal, ProjectTaskModalAddNewTask, ProjectTaskModalDetail, ProjectTaskModalDistributionChart, ProjectTaskModalHeader, ProjectTaskModalOptions, ProjectTaskModalSubTaskData, StatusBadge } from "@/components";
+import { ProjectSubTaskIncidenceModal, ProjectSubTaskModal, ProjectTaskIncidenceModal, ProjectTaskModalAddNewTask, ProjectTaskModalDetail, ProjectTaskModalDistributionChart, ProjectTaskModalHeader, ProjectTaskModalOptions, ProjectTaskModalSubTaskData, ProjectTaskProgressModal, StatusBadge } from "@/components";
 import { Task } from "@/interfaces";
 import { useProjectStore } from "@/store";
 
@@ -16,19 +16,25 @@ export const ProjectIncidenceModal = ({ tasks, projectId }: Props) => {
     const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
     const activeTaskId = useProjectStore(state => state.activeTaskId)
 
-    const taskModalData = activeProjectTasks?.find(task => task.id === activeTaskId)       
+    let modalComponent = null;
+
+    switch (incidenceModalType) {
+        case 'task':
+            modalComponent = <ProjectTaskIncidenceModal />;
+            break;
+        case 'subtask':
+            modalComponent = <ProjectSubTaskIncidenceModal />;
+            break;
+        case 'progress':
+            modalComponent = <ProjectTaskProgressModal />;
+            break;
+        default:
+            modalComponent = null; // Handle other cases if needed
+    }
 
     return (
         <>
-            {
-                incidenceModalType === 'task'
-
-                    ? <ProjectTaskIncidenceModal />
-                    :
-                    taskModalData
-                        ? <ProjectSubTaskIncidenceModal />
-                        : <></>
-            }
+            {modalComponent}
         </>
     );
 };
