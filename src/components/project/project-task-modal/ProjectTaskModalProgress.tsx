@@ -12,16 +12,22 @@ const ProjectTaskModalProgress = () => {
     const taskModalData = activeProjectTasks?.find(task => task.id === activeTaskId)
 
     const progressBySubTaskIncidence = getProgressBySubTaskIncidence(taskModalData?.subTasks)
+    const progressManually = parseInt(taskModalData?.progress || "0", 10)
+
     const [progress, setProgress] = useState(0);
 
     useEffect(() => {
         setProgress(0);
         const timer = setTimeout(() => {
-            setProgress(progressBySubTaskIncidence);
+            if (progressManually > 0) {
+                setProgress(progressManually)
+            } else {
+                setProgress(progressBySubTaskIncidence);
+            }
         }, 500);
 
         return () => clearTimeout(timer);
-    }, [taskModalData]);
+    }, [progressBySubTaskIncidence, progressManually]);
 
     return (
         <div className="relative h-28 md:h-36 p-2 mr-1">

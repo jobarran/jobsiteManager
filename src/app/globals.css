@@ -115,3 +115,11 @@ body {
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
 }
+
+.progress-disabled-input:disabled {
+  filter: grayscale(1) opacity(0.5); 
+}
+
+.progress-disabled-div {
+  filter: grayscale(1) opacity(0.5); /* Adjust the opacity value to make it lighter */
+}

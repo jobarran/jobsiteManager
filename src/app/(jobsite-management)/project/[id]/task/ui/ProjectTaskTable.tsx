@@ -36,14 +36,16 @@ export const ProjectTaskTable = ({ tasks, projectId }: Props) => {
 
 
     const head = ['Name', 'Location', 'Progress', 'Incidence', 'Contractor', 'End', 'Priority']
-    
+
 
     const data = filteredData ? filteredData.map((task) => ({
         id: task.id,
         location: task.location,
         name: task.name,
         status: task.status,
-        progress: Array.isArray(task.subTasks) ? getProgressBySubTaskIncidence(task.subTasks) : 0,
+        progress: task.progress === '0' ?
+            (Array.isArray(task.subTasks) ? getProgressBySubTaskIncidence(task.subTasks) : '0')
+            : parseInt(task.progress.toString()),
         incidence: task.incidence,
         contractor: task.contractor,
         end: task.end,

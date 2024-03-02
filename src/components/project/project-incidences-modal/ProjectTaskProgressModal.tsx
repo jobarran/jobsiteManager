@@ -5,10 +5,9 @@ import { Task } from "@/interfaces";
 import { useProjectStore } from "@/store";
 import { useEffect, useState } from "react";
 import { FaSave } from "react-icons/fa";
-import { FaCheckCircle } from "react-icons/fa";
-import { IoAlertCircle } from "react-icons/io5";
-import { FaPercentage } from "react-icons/fa";
 import { FaX } from "react-icons/fa6";
+import { getProgressBySubTaskIncidence } from "@/utils";
+import { updateTaskProgress } from "@/actions";
 
 export const ProjectTaskProgressModal = () => {
 
@@ -18,24 +17,35 @@ export const ProjectTaskProgressModal = () => {
     const activeProject = useProjectStore(state => state.activeProject)
     const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
     const activeTaskId = useProjectStore(state => state.activeTaskId)
+    const taskModalData = activeProjectTasks?.find(task => task.id === activeTaskId)
 
     const TaskModalData = activeProjectTasks?.find(task => task.id === activeTaskId)
+    const progressBySubTaskIncidence = getProgressBySubTaskIncidence(taskModalData?.subTasks)
+
 
     const [taskProgress, setTaskProgress] = useState(parseInt(TaskModalData?.progress ? TaskModalData?.progress : '0'))
-    const [updatedTasks, setUpdatedTasks] = useState<Task[]>([]);
+    const [updatedTask, setUpdatedTask] = useState<Task>();
     const [isModalEditable, setIsModalEditable] = useState(false)
-    const [isCheckedSubtask, setIsCheckedSubtask] = useState(true);
-    const [isCheckedManual, setIsCheckedManual] = useState(false);
+    const [isCheckedSubtask, setIsCheckedSubtask] = useState(taskProgress === 0);
+    const [isCheckedManual, setIsCheckedManual] = useState(taskProgress > 0);
 
     useEffect(() => {
-        if (activeProjectTasks)
-            setUpdatedTasks(activeProjectTasks)
+        if (TaskModalData)
+            setUpdatedTask(TaskModalData)
     }, [activeProjectTasks])
 
-    const handleUpdateTaskIncidence = () => {
-        updateTaskIncidence(updatedTasks, activeProject?.id);
-        setProjectTasks(updatedTasks);
-        closeIncidenceModal();
+
+    const handleUpdateTaskProgress = () => {
+        if (activeProjectTasks) {
+            const updatedProgress = isCheckedSubtask ? '0' : taskProgress.toString();
+            const updatedProgressStore = isCheckedSubtask ? 0 : taskProgress;
+            updateTaskProgress(updatedProgress, activeTaskId, activeProject?.id)
+            const updatedTasks = updateTaskProgressById(activeProjectTasks, activeTaskId, updatedProgressStore);
+            setProjectTasks(updatedTasks);
+            closeIncidenceModal();
+        } else {
+            console.error('Active project tasks is null.');
+        }
     };
 
     const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -44,6 +54,21 @@ export const ProjectTaskProgressModal = () => {
         }
     };
 
+    const updateTaskProgressById = (tasks: Task[], activeTaskId: string | undefined, taskProgress: number): Task[] => {
+
+        const index = tasks.findIndex(task => task.id === activeTaskId);
+
+        if (index !== -1) {
+            const updatedTasks = [...tasks];
+            updatedTasks[index] = {
+                ...updatedTasks[index],
+                progress: taskProgress.toString() 
+            };
+            return updatedTasks;
+        }
+
+        return tasks;
+    };
 
     const handleCloseIncidenceModal = () => {
         // setUpdatedTasks(originalTasks);
@@ -57,11 +82,14 @@ export const ProjectTaskProgressModal = () => {
 
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = e.target;
-        console.log( name, checked)
+        console.log(name, checked)
         if (name === 'subtask' && checked) {
+            setIsModalEditable(true)
+            setTaskProgress(progressBySubTaskIncidence)
             setIsCheckedSubtask(true);
             setIsCheckedManual(false);
         } else if (name === 'manual' && checked) {
+            setIsModalEditable(true)
             setIsCheckedManual(true);
             setIsCheckedSubtask(false);
         }
@@ -104,8 +132,8 @@ export const ProjectTaskProgressModal = () => {
                                         type="button"
                                         className={`bg-transparent rounded-lg text-lg w-6 h-6 inline-flex justify-center items-center ${isModalEditable ? 'text-sky-700' : 'text-gray-400'}`}
                                         data-modal-toggle="crud-modal"
-                                        onClick={handleUpdateTaskIncidence}
-                                        disabled={false} //todo:
+                                        onClick={handleUpdateTaskProgress}
+                                        disabled={false}
                                     >
                                         <FaSave />
                                         <span className="sr-only">Save</span>
@@ -169,8 +197,9 @@ export const ProjectTaskProgressModal = () => {
                                 value={taskProgress}
                                 disabled={isCheckedSubtask}
                                 onChange={(event) => handleOnProgressChange(event)}
-                                className="
+                                className={`
                                     w-full h-full pt-2 appearance-none cursor-pointer bg-transparent z-30
+                                    ${isCheckedSubtask ? 'progress-disabled-input' : ''}
                                     [&::-webkit-slider-thumb]:bg-blue-600 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:appearance-none
                                     [&::-moz-range-thumb]:bg-blue-600 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:w-2.5 [&::-moz-range-thumb]:h-2.5 [&::-moz-range-thumb]:appearance-none
                                     [&::-ms-thumb]:bg-blue-600 [&::-ms-thumb]:rounded-full [&::-ms-thumb]:border-0 [&::-ms-thumb]:w-2.5 [&::-ms-thumb]:h-2.5 [&::-ms-thumb]:appearance-none
@@ -179,9 +208,16 @@ export const ProjectTaskProgressModal = () => {
                                     [&::-ms-track]:bg-neutral-200 [&::-ms-track]:rounded-full
                                     [&::-moz-range-progress]:bg-blue-400 [&::-moz-range-progress]:rounded-full
                                     [&::-ms-fill-lower]:bg-blue-400 [&::-ms-fill-lower]:rounded-full
-                                    [&::-webkit-slider-thumb]:shadow-[-999px_0px_0px_990px_#4e97ff]"
+                                    [&::-webkit-slider-thumb]:shadow-[-999px_0px_0px_990px_#4e97ff]
+                                `}
                             />
-                            <div style={labelStyle} className="inline-block mt-1 py-0.5 px-1.5 bg-blue-50 border border-blue-200 text-xs font-medium text-blue-600 rounded-lg">
+                            <div
+                                style={labelStyle}
+                                className={`
+                                    ${isCheckedSubtask ? 'progress-disabled-div' : ''}
+                                    inline-block mt-1 py-0.5 px-1.5 bg-blue-50 border border-blue-200 text-xs font-medium text-blue-600 rounded-lg
+                                `}
+                            >
                                 {taskProgress}%
                             </div>
                         </div>
