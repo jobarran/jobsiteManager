@@ -1,4 +1,4 @@
-import { Task } from '@/interfaces';
+import { FetchProject, Task } from '@/interfaces';
 import { useState, useMemo } from 'react';
 
 type ObjectType = {
@@ -6,8 +6,8 @@ type ObjectType = {
 };
 
 const useQuickSearch = (
-    initialData: (Task | ObjectType)[] | null,
-): [ObjectType[], (searchValue: string) => void, () => void, (newData: (Task | ObjectType)[] | null) => void] => {
+    initialData: (Task | FetchProject | ObjectType)[] | null,
+): [ObjectType[], (searchValue: string) => void, () => void, (newData: (Task | FetchProject | ObjectType)[] | null) => void] => {
     const [data, setData] = useState<ObjectType[]>(() => {
         if (initialData) {
             const filteredData = initialData.filter(item => item !== null) as ObjectType[];
@@ -38,7 +38,7 @@ const useQuickSearch = (
         setSearch('');
     };
 
-    const setNewData = (newData: (Task | ObjectType)[] | null) => {
+    const setNewData = (newData: (Task | FetchProject | ObjectType)[] | null) => {
         if (newData) {
             const filteredData = newData.filter(item => item !== null) as ObjectType[];
             setData(filteredData);

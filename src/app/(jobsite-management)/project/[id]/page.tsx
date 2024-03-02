@@ -49,12 +49,12 @@ export default async function ProjectByIdPage({ params }: Props) {
         )}
 
         <div className="w-full xl:flex">
-          <div className="w-full xl:w-4/6 xl:mr-4 mb-4 xl:mb-0">
+          <div className="w-full xl:w-7/12 xl:mr-4 mb-4 xl:mb-0">
             <div className="charts-card">
               <ProjectDashboardChartsCard />
             </div>
           </div>
-          <div className="w-full xl:w-2/6">
+          <div className="w-full xl:w-5/12">
             <div className="todo-card">
               {
                 project

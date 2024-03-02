@@ -10,8 +10,6 @@ interface Props {
 
 export const ProjectTableHeader = ({ searchValue, handleSearchChange, handleClearSearch }: Props) => {
 
-
-
     return (
         <div className="relative">
 

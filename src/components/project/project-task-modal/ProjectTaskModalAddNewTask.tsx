@@ -50,7 +50,7 @@ export const ProjectTaskModalAddNewTask = () => {
             description: data.description,
             incidence: '0',
             contractor: data.contractor,
-            progress: '0%',
+            progress: '0',
             start: value.startDate,
             end: value.endDate,
             priority: data.priority,

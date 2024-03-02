@@ -2,12 +2,17 @@
 
 import { Task, Todo } from '@/interfaces';
 import { useProjectStore } from '@/store';
-import { handleDateStatusBgColor, handleDateStatusText, handleDateStatusTextColor } from '@/utils';
+import { capitalizeFirstLetter, handleDateStatusBgColor, handleDateStatusText, handleDateStatusTextColor } from '@/utils';
 import { useEffect, useState } from 'react';
 import { FaRegSquare, FaRegStar, FaSquareCheck, FaStar, FaTrash } from 'react-icons/fa6';
 
 interface Props {
     tasks: Task[] | undefined
+}
+
+interface ExtendedTodo extends Todo {
+    subTaskName: string;
+    taskName: string
 }
 
 export const ProjectDashboardTodoCard = ({ tasks }: Props) => {
@@ -22,28 +27,32 @@ export const ProjectDashboardTodoCard = ({ tasks }: Props) => {
         }
     }, [])
 
-    function getAllTodos(tasks: Task[]) {
-        
-        let allTodos: Todo[] = [];
+    const findTaskNameById = (taskId: string, tasks: Task[]): string => {
+        const foundTask = tasks.find(task => task.id === taskId);
+        return foundTask ? foundTask.name : ""
+    }
+
+    const getAllTodos = (activeProjectTasks: Task[] | null): ExtendedTodo[] => {
+        let allTodos: ExtendedTodo[] = [];
     
-        tasks.forEach(task => {
+        if (!activeProjectTasks) {
+            return allTodos; 
+        }
+    
+        activeProjectTasks.forEach(task => {
             task.subTasks.forEach(subTask => {
-                if (subTask.todos) { 
-                    allTodos = allTodos.concat(subTask.todos);
-                }            });
-        });
-    
-        allTodos.sort((a, b) => {
-            const dateA = new Date(a.date);
-            const dateB = new Date(b.date);
-            
-            if (dateA < dateB) {
-                return -1;
-            }
-            if (dateA > dateB) {
-                return 1;
-            }
-            return 0;
+                if (subTask.todos) {
+                    subTask.todos.forEach(todo => {
+                        const taskName = findTaskNameById(subTask.taskId, activeProjectTasks);
+                        const todoWithSubtaskName: ExtendedTodo = {
+                            ...todo,
+                            subTaskName: subTask.name,
+                            taskName: taskName
+                        };
+                        allTodos.push(todoWithSubtaskName);
+                    });
+                }
+            });
         });
     
         return allTodos;
@@ -52,19 +61,23 @@ export const ProjectDashboardTodoCard = ({ tasks }: Props) => {
 
     const allTodos = getAllTodos(activeProjectTasks ? activeProjectTasks : [])
 
+    console.log(allTodos)
+
     return (
 
         <div className="w-full p-4  border border-gray-100 bg-white rounded-lg sm:p-8">
             <h5 className="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400">Todo list</h5>
 
             <div className="w-full text-sm text-gray-500">
-                {allTodos.map((item: Todo, index: number) => (
+                {allTodos.map((item: ExtendedTodo, index: number) => (
                     <div key={index} className="flex items-center justify-between pt-4">
                         <div className="flex items-center space-x-2">
                             <button className={`pr-1 py-1 ${item.done ? 'text-lime-600' : 'text-gray-500'}`} onClick={() => { }}>
                                 {item.done ? <FaSquareCheck /> : <FaRegSquare />}
                             </button>
-                            <p className="flex-shrink">{item.description}</p>
+                            <p className="flex-shrink">
+                                <span className="text-gray-400">{`${capitalizeFirstLetter(item.taskName)} / ${capitalizeFirstLetter(item.subTaskName)}`}</span> - {capitalizeFirstLetter(item.description)}
+                            </p>
                             <span className={`${handleDateStatusTextColor(item)} ${handleDateStatusBgColor(item)} text-xs font-medium px-2.5 py-0.5 rounded`}>
                                 {handleDateStatusText(item)}
                             </span>
