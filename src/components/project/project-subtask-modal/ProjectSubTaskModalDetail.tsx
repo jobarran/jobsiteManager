@@ -5,7 +5,7 @@ import { useProjectStore } from "@/store";
 import { useEffect, useState } from "react";
 import { updateSubTask } from '../../../actions/task/update-subtask';
 import { SubTask, Todo } from "@/interfaces";
-import { createOrUpdateTodosBySubTask } from "@/actions";
+import { createOrUpdateTodosBySubTask, deleteTodoById } from "@/actions";
 
 export const ProjectSubTaskModalDetail = () => {
 
@@ -61,10 +61,17 @@ export const ProjectSubTaskModalDetail = () => {
                 todos: todos
             };
             updateSubTask(updatedSubTask, activeTaskId);
-            createOrUpdateTodosBySubTask(modifiedTodos, activeSubTaskId)
             updateProjectSubTask(updatedSubTask)
+            createOrUpdateTodosBySubTask(modifiedTodos, activeSubTaskId)
+                .then(() => {
+                    setModifiedTodos([]);
+                    setDeletedTodos([]);
+                })
+            deleteTodoById(deletedTodos)
+                .then(() => {
+                    setDeletedTodos([]);
+                })
             closeSubTaskModal()
-            setDeletedTodos([])
 
         }
     }

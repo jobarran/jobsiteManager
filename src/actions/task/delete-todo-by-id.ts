@@ -4,7 +4,7 @@ import { auth } from "@/auth.config";
 import prisma from "@/lib/prisma";
 
 
-export const deleteTodoById = async (todoId: string | undefined) => {
+export const deleteTodoById = async (todoIds: string[] | undefined) => {
     try {
         const session = await auth();
         const userId = session?.user.id;
@@ -16,36 +16,47 @@ export const deleteTodoById = async (todoId: string | undefined) => {
             };
         }
 
-        // Check if the todo exists
-        const existingTodo = await prisma.todo.findUnique({
-            where: {
-                id: todoId
-            }
-        });
-
-        if (!existingTodo) {
+        if (!todoIds || todoIds.length === 0) {
             return {
                 ok: false,
-                message: 'Todo with the given ID does not exist',
+                message: 'No todo IDs provided',
             };
         }
 
-        // Delete the todo
-        await prisma.todo.delete({
+        // Check if the todo IDs exist
+        const existingTodos = await prisma.todo.findMany({
             where: {
-                id: todoId
+                id: {
+                    in: todoIds
+                }
+            }
+        });
+
+        if (existingTodos.length !== todoIds.length) {
+            return {
+                ok: false,
+                message: 'One or more todos with the given IDs do not exist',
+            };
+        }
+
+        // Delete todos
+        await prisma.todo.deleteMany({
+            where: {
+                id: {
+                    in: todoIds
+                }
             }
         });
 
         return {
             ok: true,
-            message: 'Todo deleted successfully',
+            message: 'Todos deleted successfully',
         };
     } catch (error) {
-        console.error('Failed to delete todo:', error);
+        console.error('Failed to delete todos:', error);
         return {
             ok: false,
-            message: 'Failed to delete todo',
+            message: 'Failed to delete todos',
         };
     }
 };
