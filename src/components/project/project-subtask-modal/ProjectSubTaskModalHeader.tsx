@@ -12,9 +12,10 @@ import { useEffect, useState } from 'react';
 
 interface Props {
     handleSaveSubTaskModal: () => void
+    setDeletedTodos: (data:string[]) => void
 }
 
-export const ProjectSubTaskModalHeader = ({ handleSaveSubTaskModal }: Props) => {
+export const ProjectSubTaskModalHeader = ({ handleSaveSubTaskModal, setDeletedTodos }: Props) => {
 
     const closeSubTaskModal = useProjectStore(state => state.closeSubTaskModal)
     const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
@@ -44,6 +45,7 @@ export const ProjectSubTaskModalHeader = ({ handleSaveSubTaskModal }: Props) => 
     const handleAlertCancel = () => {
         closeSubTaskModal();
         setShowAlert(false);
+        setDeletedTodos([])
     };
 
     const handleAlertClose = () => {

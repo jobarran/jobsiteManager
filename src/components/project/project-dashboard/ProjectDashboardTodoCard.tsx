@@ -2,9 +2,11 @@
 
 import { Task, Todo } from '@/interfaces';
 import { useProjectStore } from '@/store';
-import { capitalizeFirstLetter, handleDateStatusBgColor, handleDateStatusText, handleDateStatusTextColor } from '@/utils';
-import { useEffect, useState } from 'react';
+import { capitalizeFirstLetter, extractTodos, getAllTodos, handleDateStatusBgColor, handleDateStatusText, handleDateStatusTextColor } from '@/utils';
+import { useEffect, useMemo, useState } from 'react';
 import { FaRegSquare, FaRegStar, FaSquareCheck, FaStar, FaTrash } from 'react-icons/fa6';
+import { FaSave } from 'react-icons/fa';
+import { updateTodos } from '@/actions';
 
 interface Props {
     tasks: Task[] | undefined
@@ -16,89 +18,131 @@ interface ExtendedTodo extends Todo {
 }
 
 export const ProjectDashboardTodoCard = ({ tasks }: Props) => {
+    const setProjectTasks = useProjectStore(state => state.setProjectTasks);
+    const activeProjectTasks = useProjectStore(state => state.activeProjectTasks);
 
-    const activeProjectTasks = useProjectStore(state => state.activeProjectTasks)
-    const setProjectTasks = useProjectStore(state => state.setProjectTasks)
+    const [todos, setTodos] = useState<ExtendedTodo[]>();
+    const [modifiedTodos, setModifiedTodos] = useState<ExtendedTodo[]>([])
+    const [validForSave, setValidForSave] = useState(false)
 
     useEffect(() => {
         if (!activeProjectTasks) {
-            setProjectTasks(tasks ? tasks : [])
-            console.log('fetching tasks')
+            setProjectTasks(tasks ? tasks : []);
+            console.log('fetching tasks');
+            const allTodos = extractTodos(tasks ? tasks : []);
+            setTodos(allTodos)
+            console.log('fetching todos from action')
+        } else {
+            const allTodos = extractTodos(activeProjectTasks);
+            setTodos(allTodos)
+            console.log('fetching todos store')
         }
-    }, [])
+    }, []);
 
-    const findTaskNameById = (taskId: string, tasks: Task[]): string => {
-        const foundTask = tasks.find(task => task.id === taskId);
-        return foundTask ? foundTask.name : ""
-    }
-
-    const getAllTodos = (activeProjectTasks: Task[] | null): ExtendedTodo[] => {
-        let allTodos: ExtendedTodo[] = [];
+    useEffect(() => {
+      console.log(modifiedTodos)
+    }, [modifiedTodos])
     
-        if (!activeProjectTasks) {
-            return allTodos; 
+
+    const handleSaveTodo = () => {
+        if (validForSave) {
+            updateTodos(modifiedTodos)
+                .then(() => {
+                    setModifiedTodos([]); // Clear modified todos after successful update
+                    setValidForSave(false);
+                })
+                .catch(error => {
+                    console.error('Failed to save todos:', error);
+                    // Handle error
+                });
         }
-    
-        activeProjectTasks.forEach(task => {
-            task.subTasks.forEach(subTask => {
-                if (subTask.todos) {
-                    subTask.todos.forEach(todo => {
-                        const taskName = findTaskNameById(subTask.taskId, activeProjectTasks);
-                        const todoWithSubtaskName: ExtendedTodo = {
-                            ...todo,
-                            subTaskName: subTask.name,
-                            taskName: taskName
-                        };
-                        allTodos.push(todoWithSubtaskName);
-                    });
-                }
-            });
-        });
-    
-        return allTodos;
+    };
+
+// Function to toggle todo done status
+const toggleTodoDone = (index: number, item: ExtendedTodo) => {
+    if (todos) {
+        const updatedTodos = todos.map(todo =>
+            todo.id === item.id ? { ...todo, done: !todo.done } : todo
+        );
+        setTodos(updatedTodos);
+        const existingModifiedTodoIndex = modifiedTodos.findIndex(todo => todo.id === item.id);
+        if (existingModifiedTodoIndex !== -1) {
+            const updatedModifiedTodos = [...modifiedTodos];
+            updatedModifiedTodos[existingModifiedTodoIndex] = { ...item, done: !item.done };
+            setModifiedTodos(updatedModifiedTodos);
+        } else {
+            setModifiedTodos(prevModifiedTodos => [...prevModifiedTodos, { ...item, done: !item.done }]);
+        }
+        setValidForSave(true);
     }
+};
 
-
-    const allTodos = getAllTodos(activeProjectTasks ? activeProjectTasks : [])
-
-    console.log(allTodos)
+// Function to toggle todo favorite status
+const toggleFav = (index: number, item: ExtendedTodo) => {
+    if (todos) {
+        const updatedTodos = todos.map(todo =>
+            todo.id === item.id ? { ...todo, favourite: !todo.favourite } : todo
+        );
+        setTodos(updatedTodos);
+        const existingModifiedTodoIndex = modifiedTodos.findIndex(todo => todo.id === item.id);
+        if (existingModifiedTodoIndex !== -1) {
+            const updatedModifiedTodos = [...modifiedTodos];
+            updatedModifiedTodos[existingModifiedTodoIndex] = { ...item, favourite: !item.favourite };
+            setModifiedTodos(updatedModifiedTodos);
+        } else {
+            setModifiedTodos(prevModifiedTodos => [...prevModifiedTodos, { ...item, favourite: !item.favourite }]);
+        }
+        setValidForSave(true);
+    }
+};
 
     return (
-
         <div className="w-full p-4  border border-gray-100 bg-white rounded-lg sm:p-8">
-            <h5 className="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400">Todo list</h5>
-
+            <div className='flex items-center justify-between mb-2'>
+                <div className='flex items-center'>
+                    <FaRegStar />
+                    <h5 className="ml-2 text-xl font-medium text-gray-500 dark:text-gray-400">Todo</h5>
+                </div>
+                <button
+                    type="button"
+                    className={`bg-transparent rounded-lg text-lg w-6 h-6 inline-flex justify-center items-center ${validForSave ? 'text-sky-700' : 'text-gray-400'}`}
+                    data-modal-toggle="crud-modal"
+                    onClick={handleSaveTodo}
+                    disabled={!validForSave}
+                >
+                    <FaSave />
+                    <span className="sr-only">Save</span>
+                </button>            </div>
             <div className="w-full text-sm text-gray-500">
-                {allTodos.map((item: ExtendedTodo, index: number) => (
+                {todos?.map((item: ExtendedTodo, index: number) => (
                     <div key={index} className="flex items-center justify-between pt-4">
                         <div className="flex items-center space-x-2">
-                            <button className={`pr-1 py-1 ${item.done ? 'text-lime-600' : 'text-gray-500'}`} onClick={() => { }}>
+                            <button
+                                className="text-yellow-400"
+                                onClick={() => toggleFav(index, item)}>
+                                {item.favourite ? <FaStar /> : <FaRegStar />}
+                            </button>
+                            <button
+                                className={`px-1 py-1 ${item.done ? 'text-lime-600' : 'text-gray-500'}`}
+                                onClick={() => toggleTodoDone(index, item)}
+                            >
                                 {item.done ? <FaSquareCheck /> : <FaRegSquare />}
                             </button>
                             <p className="flex-shrink">
-                                <span className="text-gray-400">{`${capitalizeFirstLetter(item.taskName)} / ${capitalizeFirstLetter(item.subTaskName)}`}</span> - {capitalizeFirstLetter(item.description)}
+                                <span className={`text-gray-400 ${item.done ? 'strikethrough' : ''}`}>
+                                    {`${capitalizeFirstLetter(item.taskName)} / ${capitalizeFirstLetter(item.subTaskName)}`}
+                                </span>
+                                <span className={`text-gray-800 font-medium ${item.done ? 'strikethrough' : ''}`}>
+                                    - {capitalizeFirstLetter(item.description)}
+                                </span>
+                                <span className={`${handleDateStatusTextColor(item)} ${handleDateStatusBgColor(item)} text-xs font-medium px-2.5 py-0.5 rounded`} style={{ whiteSpace: 'nowrap' }}>
+                                    {handleDateStatusText(item)}
+                                </span>
                             </p>
-                            <span className={`${handleDateStatusTextColor(item)} ${handleDateStatusBgColor(item)} text-xs font-medium px-2.5 py-0.5 rounded`}>
-                                {handleDateStatusText(item)}
-                            </span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                            <button className="px-1 py-1 text-yellow-400" onClick={() => { }}>
-                                {item.favourite ? <FaStar /> : <FaRegStar />}
-                            </button>
-                            <button className="px-1 py-1 text-red-500" onClick={() => { }}>
-                                <FaTrash />
-                            </button>
                         </div>
                     </div>
                 ))}
             </div>
-
         </div>
-
-
-    )
-}
-
-
-
+    );
+};

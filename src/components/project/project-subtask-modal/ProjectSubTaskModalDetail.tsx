@@ -4,7 +4,7 @@ import { ProjectSubTaskModalHeader, ProjectSubTaskRangeValue, ProjectSubTaskToDo
 import { useProjectStore } from "@/store";
 import { useEffect, useState } from "react";
 import { updateSubTask } from '../../../actions/task/update-subtask';
-import { SubTask } from "@/interfaces";
+import { SubTask, Todo } from "@/interfaces";
 import { createOrUpdateTodosBySubTask } from "@/actions";
 
 export const ProjectSubTaskModalDetail = () => {
@@ -22,19 +22,25 @@ export const ProjectSubTaskModalDetail = () => {
 
     const [progressValue, setProgressValue] = useState(parseInt(subTaskModalData ? subTaskModalData?.progress : '0'));
     const [todos, setTodos] = useState(subTaskModalData ? subTaskModalData?.todos : [])
+    const [modifiedTodos, setModifiedTodos] = useState<Todo[]>([])
+    const [deletedTodos, setDeletedTodos] = useState<string[]>([])
+
+    useEffect(() => {
+        console.log(deletedTodos)
+    }, [deletedTodos])
 
     useEffect(() => {
         setProgressValue(parseInt(subTaskModalData ? subTaskModalData?.progress : '0'))
         setTodos(subTaskModalData ? subTaskModalData?.todos : [])
     }, [subTaskModalData])
-    
+
     const updateProjectSubTask = (updatedSubTask: SubTask) => {
         if (activeProjectTasks) {
             const updatedProjectTasks = activeProjectTasks.map(task => {
                 if (task.id === activeTaskId) {
                     const updatedSubTasks = task.subTasks.map(subtask => {
                         if (subtask.id === updatedSubTask.id) {
-                            return updatedSubTask; 
+                            return updatedSubTask;
                         }
                         return subtask;
                     });
@@ -55,18 +61,21 @@ export const ProjectSubTaskModalDetail = () => {
                 todos: todos
             };
             updateSubTask(updatedSubTask, activeTaskId);
-            createOrUpdateTodosBySubTask(todos, activeSubTaskId)
+            createOrUpdateTodosBySubTask(modifiedTodos, activeSubTaskId)
             updateProjectSubTask(updatedSubTask)
             closeSubTaskModal()
+            setDeletedTodos([])
+
         }
     }
-    
+
 
     return (
         <div>
             <div className="flex items-start justify-between py-4 border-b rounded-t dark:border-gray-600">
                 <ProjectSubTaskModalHeader
                     handleSaveSubTaskModal={handleSaveSubTaskModal}
+                    setDeletedTodos={setDeletedTodos}
                 />
             </div>
             <ProjectSubTaskRangeValue
@@ -76,6 +85,10 @@ export const ProjectSubTaskModalDetail = () => {
             <ProjectSubTaskToDo
                 todos={todos ? todos : []}
                 setTodos={setTodos}
+                modifiedTodos={modifiedTodos}
+                setModifiedTodos={setModifiedTodos}
+                setDeletedTodos={setDeletedTodos}
+                deletedTodos={deletedTodos}
             />
         </div>
     );

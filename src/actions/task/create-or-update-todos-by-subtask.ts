@@ -4,17 +4,16 @@ import { auth } from "@/auth.config";
 import { Todo } from "@/interfaces";
 import prisma from "@/lib/prisma";
 
-export const createOrUpdateTodosBySubTask = async (todos:Todo[], subTaskId:string | undefined) => {
-
+export const createOrUpdateTodosBySubTask = async (todos: Todo[], subTaskId: string | undefined) => {
     if (!todos) {
         console.error('Todos array is undefined');
         return 'Todos array is undefined';
     }
-    
-    console.log('updating Todos...')
-    
+
+    console.log('Creating or updating Todos...');
+
     const session = await auth();
-    const userId = session?.user.id
+    const userId = session?.user.id;
 
     if (!userId) {
         return {
@@ -39,30 +38,40 @@ export const createOrUpdateTodosBySubTask = async (todos:Todo[], subTaskId:strin
             throw new Error('Subtask not found');
         }
 
-        // Create new Todo objects based on the received todos data
-        const newTodos = todos.map(todoData => ({
-            description: todoData.description,
-            date: todoData.date,
-            done: todoData.done || false,
-            favourite: todoData.favourite || false,
-            subTaskId: subTaskId || ''
-        }));
+        // Iterate through received todos to create or update them
+        for (const todoData of todos) {
+            const existingTodo = subtask.todos.find(todo => todo.id === todoData.id);
 
-        // Replace existing todos with the new todos received in props
-        await prisma.todo.deleteMany({
-            where: {
-                subTaskId: subTaskId
+            if (existingTodo) {
+                // Update existing todo
+                await prisma.todo.update({
+                    where: { id: existingTodo.id },
+                    data: {
+                        description: todoData.description,
+                        date: todoData.date,
+                        done: todoData.done || false,
+                        favourite: todoData.favourite || false
+                    }
+                });
+            } else {
+                // Create new todo
+                await prisma.todo.create({
+                    data: {
+                        description: todoData.description,
+                        date: todoData.date,
+                        done: todoData.done || false,
+                        favourite: todoData.favourite || false,
+                        subTaskId: subTaskId || ''
+                    }
+                });
             }
-        });
+        }
 
-        await prisma.todo.createMany({
-            data: newTodos
-        });
-        console.log('Todos updated successfully')
-        return 'Todos updated successfully';
+        console.log('Todos created or updated successfully');
+        return 'Todos created or updated successfully';
     } catch (error) {
         // Handle errors
-        console.error('Error updating subtask todos:', error);
-        return 'Failed to update todos';
+        console.error('Error creating or updating subtask todos:', error);
+        return 'Failed to create or update todos';
     }
-}
+};

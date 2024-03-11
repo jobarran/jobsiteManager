@@ -123,3 +123,7 @@ body {
 .progress-disabled-div {
   filter: grayscale(1) opacity(0.5); /* Adjust the opacity value to make it lighter */
 }
+
+.strikethrough {
+  text-decoration: line-through;
+}
