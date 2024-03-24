@@ -1,9 +1,8 @@
 'use client'
 
-import { ProjectTableBody, ProjectTableHeader, ProjectTaskTableBody, ProjectTaskTableHeader } from '@/components'
+import { ProjectTaskTableBody, ProjectTaskTableHeader } from '@/components'
 import useQuickSearch from '@/hooks/useQuickSearch'
 import React, { useEffect, useState } from 'react'
-import { Project, SubTask } from '@/interfaces'
 import { getProgressBySubTaskIncidence } from '@/utils'
 import { useProjectStore } from '@/store'
 

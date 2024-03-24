@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { FaRegSquare, FaRegStar, FaSquareCheck, FaStar, FaTrash } from 'react-icons/fa6';
 import { FaSave } from 'react-icons/fa';
 import { updateTodos } from '@/actions';
+import { TodoSkeleton } from '@/components';
 
 interface Props {
     tasks: Task[] | undefined
@@ -24,6 +25,8 @@ export const ProjectDashboardTodoCard = ({ tasks }: Props) => {
     const [todos, setTodos] = useState<ExtendedTodo[]>();
     const [modifiedTodos, setModifiedTodos] = useState<ExtendedTodo[]>([])
     const [validForSave, setValidForSave] = useState(false)
+    const [loading, setLoading] = useState(true); // Added loading state
+
 
     useEffect(() => {
         if (!activeProjectTasks) {
@@ -32,69 +35,86 @@ export const ProjectDashboardTodoCard = ({ tasks }: Props) => {
             const allTodos = extractTodos(tasks ? tasks : []);
             setTodos(allTodos)
             console.log('fetching todos from action')
+            setLoading(false); // Set loading to false after todos are fetched
+
         } else {
             const allTodos = extractTodos(activeProjectTasks);
             setTodos(allTodos)
             console.log('fetching todos store')
+            setLoading(false); // Set loading to false after todos are fetched
+
         }
     }, []);
 
     useEffect(() => {
-      console.log(modifiedTodos)
+        console.log(modifiedTodos)
     }, [modifiedTodos])
-    
 
-    const handleSaveTodo = () => {
-        if (validForSave) {
-            updateTodos(modifiedTodos)
-                .then(() => {
-                    setModifiedTodos([]); // Clear modified todos after successful update
-                    setValidForSave(false);
-                })
-                .catch(error => {
-                    console.error('Failed to save todos:', error);
-                    // Handle error
+
+    const handleSaveTodo = async () => {
+        if (validForSave && todos) {
+            setLoading(true);
+            try {
+                await updateTodos(modifiedTodos);
+
+                const updatedTodos = [...todos];
+
+                modifiedTodos.forEach(modifiedTodo => {
+                    const index = updatedTodos.findIndex(todo => todo.id === modifiedTodo.id);
+                    if (index !== -1) {
+                        updatedTodos[index] = modifiedTodo;
+                    }
                 });
+
+                const filteredTodos = updatedTodos.filter(todo => !todo.done && todo.favourite);
+
+                setTodos(filteredTodos);
+                setModifiedTodos([]);
+                setValidForSave(false);
+            } catch (error) {
+                console.error('Failed to save todos:', error);
+                // Handle error
+            } finally {
+                setLoading(false);
+            }
         }
     };
 
-// Function to toggle todo done status
-const toggleTodoDone = (index: number, item: ExtendedTodo) => {
-    if (todos) {
-        const updatedTodos = todos.map(todo =>
-            todo.id === item.id ? { ...todo, done: !todo.done } : todo
-        );
-        setTodos(updatedTodos);
-        const existingModifiedTodoIndex = modifiedTodos.findIndex(todo => todo.id === item.id);
-        if (existingModifiedTodoIndex !== -1) {
-            const updatedModifiedTodos = [...modifiedTodos];
-            updatedModifiedTodos[existingModifiedTodoIndex] = { ...item, done: !item.done };
-            setModifiedTodos(updatedModifiedTodos);
-        } else {
-            setModifiedTodos(prevModifiedTodos => [...prevModifiedTodos, { ...item, done: !item.done }]);
+    const toggleTodoDone = (item: ExtendedTodo) => {
+        if (todos) {
+            const updatedTodos = todos.map(todo =>
+                todo.id === item.id ? { ...todo, done: !todo.done } : todo
+            );
+            setTodos(updatedTodos);
+            const existingModifiedTodoIndex = modifiedTodos.findIndex(todo => todo.id === item.id);
+            if (existingModifiedTodoIndex !== -1) {
+                const updatedModifiedTodos = [...modifiedTodos];
+                updatedModifiedTodos[existingModifiedTodoIndex] = { ...item, done: !item.done };
+                setModifiedTodos(updatedModifiedTodos);
+            } else {
+                setModifiedTodos(prevModifiedTodos => [...prevModifiedTodos, { ...item, done: !item.done }]);
+            }
+            setValidForSave(true);
         }
-        setValidForSave(true);
-    }
-};
+    };
 
-// Function to toggle todo favorite status
-const toggleFav = (index: number, item: ExtendedTodo) => {
-    if (todos) {
-        const updatedTodos = todos.map(todo =>
-            todo.id === item.id ? { ...todo, favourite: !todo.favourite } : todo
-        );
-        setTodos(updatedTodos);
-        const existingModifiedTodoIndex = modifiedTodos.findIndex(todo => todo.id === item.id);
-        if (existingModifiedTodoIndex !== -1) {
-            const updatedModifiedTodos = [...modifiedTodos];
-            updatedModifiedTodos[existingModifiedTodoIndex] = { ...item, favourite: !item.favourite };
-            setModifiedTodos(updatedModifiedTodos);
-        } else {
-            setModifiedTodos(prevModifiedTodos => [...prevModifiedTodos, { ...item, favourite: !item.favourite }]);
+    const toggleFav = (item: ExtendedTodo) => {
+        if (todos) {
+            const updatedTodos = todos.map(todo =>
+                todo.id === item.id ? { ...todo, favourite: !todo.favourite } : todo
+            );
+            setTodos(updatedTodos);
+            const existingModifiedTodoIndex = modifiedTodos.findIndex(todo => todo.id === item.id);
+            if (existingModifiedTodoIndex !== -1) {
+                const updatedModifiedTodos = [...modifiedTodos];
+                updatedModifiedTodos[existingModifiedTodoIndex] = { ...item, favourite: !item.favourite };
+                setModifiedTodos(updatedModifiedTodos);
+            } else {
+                setModifiedTodos(prevModifiedTodos => [...prevModifiedTodos, { ...item, favourite: !item.favourite }]);
+            }
+            setValidForSave(true);
         }
-        setValidForSave(true);
-    }
-};
+    };
 
     return (
         <div className="w-full p-4  border border-gray-100 bg-white rounded-lg sm:p-8">
@@ -114,17 +134,20 @@ const toggleFav = (index: number, item: ExtendedTodo) => {
                     <span className="sr-only">Save</span>
                 </button>            </div>
             <div className="w-full text-sm text-gray-500">
-                {todos?.map((item: ExtendedTodo, index: number) => (
+
+
+                {loading && TodoSkeleton}
+                {!loading && todos?.map((item: ExtendedTodo, index: number) => (
                     <div key={index} className="flex items-center justify-between pt-4">
                         <div className="flex items-center space-x-2">
                             <button
                                 className="text-yellow-400"
-                                onClick={() => toggleFav(index, item)}>
+                                onClick={() => toggleFav(item)}>
                                 {item.favourite ? <FaStar /> : <FaRegStar />}
                             </button>
                             <button
                                 className={`px-1 py-1 ${item.done ? 'text-lime-600' : 'text-gray-500'}`}
-                                onClick={() => toggleTodoDone(index, item)}
+                                onClick={() => toggleTodoDone(item)}
                             >
                                 {item.done ? <FaSquareCheck /> : <FaRegSquare />}
                             </button>

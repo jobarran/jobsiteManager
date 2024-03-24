@@ -20,9 +20,9 @@ export const extractTodos = (tasks: Task[]): ExtendedTodo[] => {
                     // Check if subTask has todos
                     if (subTask.todos && subTask.todos.length > 0) {
                         // Filter todos with favourite = true
-                        const favouriteTodos = subTask.todos.filter(todo => todo.favourite);
+                        const favoriteUndoneTodos = subTask.todos.filter(todo => todo.favourite && !todo.done);
                         // Iterate through filtered todos
-                        favouriteTodos.forEach(todo => {
+                        favoriteUndoneTodos.forEach(todo => {
                             // Add todos to the todos array with subTaskName and taskName
                             todos.push({ ...todo, subTaskName, taskName: task.name });
                         });

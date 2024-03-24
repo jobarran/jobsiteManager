@@ -3,7 +3,6 @@ import { SubTask, SubTaskStatus } from "@/interfaces";
 
 export const countSubtasksWithStatus = (subTasks: SubTask[] | undefined, status: SubTaskStatus): number => {
     
-    // console.log(subTasks)
     
     // Check if subTasks is null or undefined
     if (subTasks === null || subTasks === undefined) {

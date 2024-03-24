@@ -83,7 +83,6 @@ export const ProjectSubTaskToDo = ({ todos = [], setTodos, modifiedTodos, setMod
             setDeletedTodos([...deletedTodos, todo.id])
     };
 
-    // Function to toggle todo done status
     const toggleTodoDone = (item: Todo) => {
         if (todos) {
             const updatedTodos = todos.map(todo =>
