@@ -49,5 +49,6 @@ export * from './project/project-incidences-modal/ProjectTaskProgressModal'
 
 export * from './project/project-dashboard/ProjectDashboardTodoCard'
 export * from './project/project-dashboard/ProjectDashboardChartsCard'
+export * from './project/project-dashboard/ProjectDashboardChartProgressBar'
 
 export * from './ui/skeleton/TodoSkeleton'

@@ -53,7 +53,7 @@ export const ProjectDashboardTodoCard = ({ tasks }: Props) => {
     }, [modifiedTodos])
 
     useEffect(() => {
-      console.log({ tasks: activeProjectTasks})
+        console.log({ tasks: activeProjectTasks })
     }, [activeProjectTasks])
 
     const handleSaveTodo = async () => {
@@ -61,18 +61,18 @@ export const ProjectDashboardTodoCard = ({ tasks }: Props) => {
             setLoading(true);
             try {
                 await updateTodos(modifiedTodos);
-    
+
                 // Update local todos with modifiedTodos
                 const updatedTodos = todos.map(todo => {
                     const modifiedTodo = modifiedTodos.find(mt => mt.id === todo.id);
                     return modifiedTodo ? modifiedTodo : todo;
                 });
-    
+
                 // Filter out todos with done=true or favourite=false
                 const filteredTodos = updatedTodos.filter(todo => !todo.done && todo.favourite);
-    
+
                 setTodos(filteredTodos);
-    
+
                 if (activeProjectTasks) {
                     // Update project tasks with modified todos
                     const updatedProjectTasks = activeProjectTasks.map(taskToUpdate => {
@@ -101,21 +101,23 @@ export const ProjectDashboardTodoCard = ({ tasks }: Props) => {
                             subTasks: updatedSubTasks,
                         };
                     });
-    
+
                     setProjectTasks(updatedProjectTasks);
                 }
-    
+
                 // Reset states after successful save
                 setModifiedTodos([]);
                 setValidForSave(false);
             } catch (error) {
                 console.error('Failed to save todos:', error);
             } finally {
-                setLoading(false);
+                setTimeout(() => {
+                    setLoading(false);
+                }, 500);
             }
         }
     };
-    
+
     const toggleTodoDone = (item: ExtendedTodo) => {
         if (todos) {
             const updatedTodos = todos.map(todo =>
@@ -177,27 +179,31 @@ export const ProjectDashboardTodoCard = ({ tasks }: Props) => {
                     <div key={index} className="flex items-center justify-between pt-4">
                         <div className="flex items-center space-x-2">
                             <button
-                                className="text-yellow-400"
-                                onClick={() => toggleFav(item)}>
+                                className="text-yellow-400 text-lg" // Increase icon size
+                                onClick={() => toggleFav(item)}
+                            >
                                 {item.favourite ? <FaStar /> : <FaRegStar />}
                             </button>
                             <button
-                                className={`px-1 py-1 ${item.done ? 'text-lime-600' : 'text-gray-500'}`}
+                                className={`${item.done ? 'text-lime-600' : 'text-gray-500'}`}
                                 onClick={() => toggleTodoDone(item)}
                             >
-                                {item.done ? <FaSquareCheck /> : <FaRegSquare />}
+                                {item.done ? <FaSquareCheck className="text-lg" /> : <FaRegSquare className="text-lg" />} {/* Increase icon size */}
                             </button>
-                            <p className="flex-shrink">
-                                <span className={`text-gray-400 ${item.done ? 'strikethrough' : ''}`}>
-                                    {`${capitalizeFirstLetter(item.taskName)} / ${capitalizeFirstLetter(item.subTaskName)}`}
-                                </span>
-                                <span className={`text-gray-800 font-medium ${item.done ? 'strikethrough' : ''}`}>
-                                    - {capitalizeFirstLetter(item.description)}
-                                </span>
-                                <span className={`${handleDateStatusTextColor(item)} ${handleDateStatusBgColor(item)} text-xs font-medium px-2.5 py-0.5 rounded`} style={{ whiteSpace: 'nowrap' }}>
-                                    {handleDateStatusText(item)}
-                                </span>
-                            </p>
+                            <div className="flex-shrink">
+                                <p>
+                                    <span className={`text-gray-400 font-small`}>
+                                        {`${capitalizeFirstLetter(item.taskName)} / ${capitalizeFirstLetter(item.subTaskName)}`}
+                                    </span>
+                                    <br />
+                                    <span className={`text-gray-800 font-medium ${item.done ? 'strikethrough' : ''}`}>
+                                        {capitalizeFirstLetter(item.description)}
+                                    </span>
+                                    <span className={`${handleDateStatusTextColor(item)} ${handleDateStatusBgColor(item)} text-xs font-medium px-2.5 py-0.5 ml-2 rounded`} style={{ whiteSpace: 'nowrap' }}>
+                                        {handleDateStatusText(item)}
+                                    </span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 ))}

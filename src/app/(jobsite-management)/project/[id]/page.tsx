@@ -56,11 +56,7 @@ export default async function ProjectByIdPage({ params }: Props) {
           </div>
           <div className="w-full xl:w-5/12">
             <div className="todo-card">
-              {
-                project
-                  ? <ProjectDashboardTodoCard tasks={tasks} />
-                  : <div>Loading...</div>
-              }
+              <ProjectDashboardTodoCard tasks={tasks} />
             </div>
           </div>
         </div>

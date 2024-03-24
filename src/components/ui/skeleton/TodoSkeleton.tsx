@@ -8,7 +8,12 @@ export const TodoSkeleton = (
             <div className="flex items-center space-x-2">
                 <FaRegStar className="text-gray-200" />
                 <FaRegSquare className="text-gray-200" />
-                <div className="h-4 w-64 rounded-full bg-gray-200"></div>
+                <div className="flex-shrink">
+                    <div className="h-3 w-56 rounded-full bg-gray-200"></div>
+                    <span className="block h-1 w-full"></span>
+                    <div className="h-3 w-44 rounded-full bg-gray-200"></div>
+                    <span className="block h-1 w-full"></span>
+                </div>
             </div>
         </div>
 
@@ -16,7 +21,12 @@ export const TodoSkeleton = (
             <div className="flex items-center space-x-2">
                 <FaRegStar className="text-gray-200" />
                 <FaRegSquare className="text-gray-200" />
-                <div className="h-4 w-44 rounded-full bg-gray-200"></div>
+                <div className="flex-shrink">
+                    <div className="h-3 w-56 rounded-full bg-gray-200"></div>
+                    <span className="block h-1 w-full"></span>
+                    <div className="h-3 w-44 rounded-full bg-gray-200"></div>
+                    <span className="block h-1 w-full"></span>
+                </div>
             </div>
         </div>
 
@@ -24,7 +34,12 @@ export const TodoSkeleton = (
             <div className="flex items-center space-x-2">
                 <FaRegStar className="text-gray-200" />
                 <FaRegSquare className="text-gray-200" />
-                <div className="h-4 w-56 rounded-full bg-gray-200"></div>
+                <div className="flex-shrink">
+                    <div className="h-3 w-56 rounded-full bg-gray-200"></div>
+                    <span className="block h-1 w-full"></span>
+                    <div className="h-3 w-44 rounded-full bg-gray-200"></div>
+                    <span className="block h-1 w-full"></span>
+                </div>
             </div>
         </div>
 
@@ -32,8 +47,14 @@ export const TodoSkeleton = (
             <div className="flex items-center space-x-2">
                 <FaRegStar className="text-gray-200" />
                 <FaRegSquare className="text-gray-200" />
-                <div className="h-4 w-44 rounded-full bg-gray-200"></div>
+                <div className="flex-shrink">
+                    <div className="h-3 w-56 rounded-full bg-gray-200"></div>
+                    <span className="block h-1 w-full"></span>
+                    <div className="h-3 w-44 rounded-full bg-gray-200"></div>
+                    <span className="block h-1 w-full"></span>
+                </div>
             </div>
         </div>
+
     </>
 );
