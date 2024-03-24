@@ -1,5 +1,6 @@
 'use client';
 
+import { useCompanyStore } from "@/store";
 import clsx from "clsx";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -18,6 +19,11 @@ export const Avatar = ({ initials, image, id, logout }: Props) => {
 
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const unSetActiveCompany = useCompanyStore((state) => state.unSetActiveCompany)
+    const unSetActiveCompanyProjects = useCompanyStore((state) => state.unSetActiveCompanyProjects)
+    const unSetActiveCompanyUsers = useCompanyStore((state) => state.unSetActiveCompanyUsers)
+
+
 
     useEffect(() => {
         const handleOutsideClick = (event: MouseEvent) => {
@@ -40,6 +46,13 @@ export const Avatar = ({ initials, image, id, logout }: Props) => {
     const handleButtonClick = () => {
         setIsOpen(!isOpen);
     };
+
+    const handleLogout = () => {
+        logout(),
+        unSetActiveCompany(),
+        unSetActiveCompanyProjects(),
+        unSetActiveCompanyUsers()
+    }
 
     return (
 
@@ -93,7 +106,7 @@ export const Avatar = ({ initials, image, id, logout }: Props) => {
                 <Link
                     href="/"
                     className="block cursor-pointer w-full whitespace-nowrap px-4 py-2 text-sm font-normal text-sky-600"
-                    onClick={() => logout()}
+                    onClick={handleLogout}
                     data-te-dropdown-item-ref
                 >
                     Log out

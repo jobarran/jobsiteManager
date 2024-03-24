@@ -13,22 +13,28 @@ interface Props {
     role?: UserRole,
 }
 
-export const registerUser = async ({name, lastName, email, password, role}:Props) => {
+export const registerUser = async ({ name, lastName, email, password, role }: Props) => {
+
 
     const session = await auth();
+    console.log(session)
     const userActiveCompany = session?.user.companyId
 
     try {
+        const userData: any = {
+            name: name,
+            lastName: lastName,
+            email: email.toLowerCase(),
+            password: bcryptjs.hashSync(password),
+            role: role ? role : 'admin',
+        };
+
+        if (userActiveCompany) {
+            userData.companyId = userActiveCompany;
+        }
 
         const user = await prisma.user.create({
-            data: {
-                name: name,
-                lastName: lastName,
-                email: email.toLowerCase(),
-                password: bcryptjs.hashSync(password),
-                role: role ? role : 'admin',
-                companyId: userActiveCompany || '',
-            },
+            data: userData,
             select: {
                 id: true,
                 name: true,
@@ -36,7 +42,7 @@ export const registerUser = async ({name, lastName, email, password, role}:Props
                 email: true,
                 role: true,
             }
-        })
+        });
 
         return {
             ok: true,

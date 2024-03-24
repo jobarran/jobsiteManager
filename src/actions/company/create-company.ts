@@ -4,6 +4,7 @@ import { auth } from "@/auth.config";
 import prisma from "@/lib/prisma";
 
 export const createCompany = async (companyName: string, userId: string) => {
+
     const session = await auth();
     const userActiveCompany = session?.user.companyId
 
