@@ -19,6 +19,7 @@ interface ExtendedTodo extends Todo {
 }
 
 export const ProjectDashboardTodoCard = ({ tasks }: Props) => {
+
     const setProjectTasks = useProjectStore(state => state.setProjectTasks);
     const activeProjectTasks = useProjectStore(state => state.activeProjectTasks);
 
@@ -30,6 +31,7 @@ export const ProjectDashboardTodoCard = ({ tasks }: Props) => {
 
     useEffect(() => {
         if (!activeProjectTasks) {
+            console.log(tasks)
             setProjectTasks(tasks ? tasks : []);
             console.log('fetching tasks');
             const allTodos = extractTodos(tasks ? tasks : []);
@@ -50,36 +52,70 @@ export const ProjectDashboardTodoCard = ({ tasks }: Props) => {
         console.log(modifiedTodos)
     }, [modifiedTodos])
 
+    useEffect(() => {
+      console.log({ tasks: activeProjectTasks})
+    }, [activeProjectTasks])
 
     const handleSaveTodo = async () => {
         if (validForSave && todos) {
             setLoading(true);
             try {
                 await updateTodos(modifiedTodos);
-
-                const updatedTodos = [...todos];
-
-                modifiedTodos.forEach(modifiedTodo => {
-                    const index = updatedTodos.findIndex(todo => todo.id === modifiedTodo.id);
-                    if (index !== -1) {
-                        updatedTodos[index] = modifiedTodo;
-                    }
+    
+                // Update local todos with modifiedTodos
+                const updatedTodos = todos.map(todo => {
+                    const modifiedTodo = modifiedTodos.find(mt => mt.id === todo.id);
+                    return modifiedTodo ? modifiedTodo : todo;
                 });
-
+    
+                // Filter out todos with done=true or favourite=false
                 const filteredTodos = updatedTodos.filter(todo => !todo.done && todo.favourite);
-
+    
                 setTodos(filteredTodos);
+    
+                if (activeProjectTasks) {
+                    // Update project tasks with modified todos
+                    const updatedProjectTasks = activeProjectTasks.map(taskToUpdate => {
+                        const updatedSubTasks = taskToUpdate.subTasks.map(subTask => {
+                            // Check if the subTask ID matches the modifiedTodo's subTaskId
+                            const modifiedTodo = modifiedTodos.find(mt => mt.subTaskId === subTask.id);
+                            if (modifiedTodo) {
+                                // Update the todo inside the subtask if its ID matches modifiedTodo's ID
+                                const updatedTodos = subTask.todos ? subTask.todos.map(todo => {
+                                    if (todo.id === modifiedTodo.id) {
+                                        return modifiedTodo; // Replace the original todo with the modified one
+                                    }
+                                    return todo; // Keep other todos unchanged
+                                }) : [];
+                                // Return the updated subtask with the modified todo
+                                return {
+                                    ...subTask,
+                                    todos: updatedTodos,
+                                };
+                            }
+                            return subTask; // Keep other subtasks unchanged
+                        });
+                        // Return the updated task with the modified subtask
+                        return {
+                            ...taskToUpdate,
+                            subTasks: updatedSubTasks,
+                        };
+                    });
+    
+                    setProjectTasks(updatedProjectTasks);
+                }
+    
+                // Reset states after successful save
                 setModifiedTodos([]);
                 setValidForSave(false);
             } catch (error) {
                 console.error('Failed to save todos:', error);
-                // Handle error
             } finally {
                 setLoading(false);
             }
         }
     };
-
+    
     const toggleTodoDone = (item: ExtendedTodo) => {
         if (todos) {
             const updatedTodos = todos.map(todo =>
